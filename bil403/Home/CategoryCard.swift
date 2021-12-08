@@ -8,12 +8,13 @@
 import SwiftUI
 
 struct CategoryCard: View {
+    let index: Int
     let url = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Culinary_fruits_front_view.jpg/640px-Culinary_fruits_front_view.jpg"
     
     var body: some View {
     
         NavigationLink {
-            ProductsView()
+            ProductsView(index: index)
         } label: {
             VStack {
                 AsyncImage(url: URL(string: url)) { image in
@@ -27,9 +28,9 @@ struct CategoryCard: View {
                 }
                 Text("Meyve")
                     .font(.subheadline)
-            }.foregroundColor(.purple)
+            }.foregroundColor(appPurple)
         }
-        .tint(.purple)
+        .tint(appPurple)
 
         
        // .background(.blue)
@@ -39,6 +40,6 @@ struct CategoryCard: View {
 
 struct CategoryCard_Previews: PreviewProvider {
     static var previews: some View {
-        CategoryCard()
+        CategoryCard(index: 4)
     }
 }

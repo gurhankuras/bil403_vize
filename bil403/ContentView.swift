@@ -17,26 +17,23 @@ struct ContentView: View {
                 HomeView()
                     .tabItem {
                         Image(systemName: "house.fill")
-                        Text("Home")
                     }
                 
-                Text("Search Tab")
+                SearchProductPage()
                     .tabItem {
                         Image(systemName: "magnifyingglass")
-                        Text("Search")
                     }
                 
                 Text("User Tab")
                     .tabItem {
                         Image(systemName: "person.fill")
-                        Text("Person")
                     }
             
             }
-            .foregroundColor(.white)
-            .background(.white)
+            .shadow(radius: 2)
+            
         }
-        .accentColor(.purple)
+        .accentColor(appPurple)
              
     }
 }

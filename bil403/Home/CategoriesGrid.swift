@@ -9,17 +9,16 @@ import SwiftUI
 
 
 struct CategoriesGrid: View {
-    let data = (1...10).map { "Item \($0)" }
+    let data = (0...10)
 
-        let columns = [
-            GridItem(.adaptive(minimum: 100))
-        ]
-    
+    let columns = [
+        GridItem(.adaptive(minimum: 100))
+    ]
     
     var body: some View {
         LazyVGrid(columns: columns, spacing: 20) {
             ForEach(data, id: \.self) { item in
-                CategoryCard()
+                CategoryCard(index: item)
             }
         }
         .padding(.horizontal)

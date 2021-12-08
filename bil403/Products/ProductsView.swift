@@ -8,10 +8,16 @@
 import SwiftUI
 
 struct ProductsView: View {
-    init() {
+    let index: Int
+    @State var currentIndex: Int
+    
+    init(index: Int) {
+        self.index = index
+        currentIndex = index
         let navBarAppearance = UINavigationBarAppearance()
         navBarAppearance.backButtonAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.white]
     }
+    
    let categories = [
        "Meyve & Sebze",
        "Kişisel Bakım",
@@ -19,13 +25,9 @@ struct ProductsView: View {
        "Temel Gıda"
    ]
     
-    @State var currentIndex: Int = 0
     var body: some View {
         VStack {
-            
-                    CategoriesSelection(categories: categories, selectedIndex: $currentIndex)
-                
-            //Spacer()
+            CategoriesSelection(categories: categories, selectedIndex: $currentIndex)
             TabView(selection: $currentIndex.animation()) {
                 ForEach(0..<categories.count, id: \.self) { index in
                     CategoryProductsView()
@@ -40,6 +42,9 @@ struct ProductsView: View {
                 Text("Ürünler")
                     .bold()
                     .foregroundColor(.white)
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+               CartIcon()
             }
         }
     }
@@ -69,7 +74,7 @@ struct CategoryTab: View {
                 
                     Rectangle()
                         .frame(width: .infinity, height: 3)
-                        .foregroundColor(selected.wrappedValue == index ? .yellow : .purple)
+                        .foregroundColor(selected.wrappedValue == index ? .yellow : appPurple)
                 
                     
             }
@@ -84,7 +89,7 @@ struct CategoryTab: View {
 
 struct ProductsView_Previews: PreviewProvider {
     static var previews: some View {
-        ProductsView()
+        ProductsView(index: 1)
     }
 }
 
@@ -102,6 +107,6 @@ struct CategoriesSelection: View {
             }
         }
         .padding(.horizontal)
-        .background(.purple)
+        .background(appPurple)
     }
 }

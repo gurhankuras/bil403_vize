@@ -27,7 +27,9 @@ struct CategoryProductsView_Previews: PreviewProvider {
 
 struct ProductsGrid: View {
     let data = (1...10).map { "Item \($0)" }
-
+    let productMock = mockProduct
+    @State var presented: Bool = false
+    
         let columns = [
             GridItem(.adaptive(minimum: 100))
         ]
@@ -36,8 +38,16 @@ struct ProductsGrid: View {
     var body: some View {
         LazyVGrid(columns: columns, spacing: 20) {
             ForEach(data, id: \.self) { item in
-                ProductCard()
+                Button {
+                    presented = true
+                } label: {
+                    ProductCard(product: productMock)
+                }
+
             }
+        }
+        .sheet(isPresented: $presented) {
+            ProductDetailsPage(product: productMock)
         }
         .padding(.horizontal)
     }

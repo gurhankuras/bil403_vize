@@ -23,7 +23,7 @@ struct HomeView: View {
                     }
                     Spacer()
                 }
-                .background(.purple)
+                .background(appPurple)
                 .navigationBarTitle("", displayMode: .inline)
                         .navigationBarHidden(true)
                 ScrollView {
