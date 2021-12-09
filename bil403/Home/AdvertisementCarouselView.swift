@@ -46,9 +46,10 @@ struct AdvertisementCarouselView: View {
     var body: some View {
         TabView(selection: $viewModel.selectedTab) {
             ForEach(0..<viewModel.ads.count) { index in
-                RoundedRectangle(cornerRadius: 5)
+                Rectangle()
                     .foregroundColor(viewModel.ads[index])
                     .tag(index)
+                    
             }
         }
         .onAppear(perform: {

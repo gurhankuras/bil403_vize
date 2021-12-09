@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CartPage: View {
-    @Binding var navigateToSelection: Bool
+   // @Binding var navigateToSelection: Bool
     var body: some View {
             VStack {
                 CartPageNavBar()
@@ -24,7 +24,10 @@ struct CartPage: View {
                 //NavigationLink {
                     //PaymentAddressSelectionPage()
                 //} label: {
-                CartPageBottomButton(navigateToSelection: $navigateToSelection)
+                CartPageBottomButton(
+                    /*navigateToSelection: $navigateToSelection
+                     */
+                     )
                 //}
                 
                 // CartPage
@@ -36,14 +39,18 @@ struct CartPage: View {
 }
 
 struct CartPageBottomButton: View {
-    @Binding var navigateToSelection: Bool
+    @EnvironmentObject var navigationHelper: NavigationHelper
+
+    // @Binding var navigateToSelection: Bool
     @Environment(\.presentationMode) var presentationMode;
-    
+    // @Environment(\.rootPresentationMode) var rootPresentationMode;
     var body: some View {
         HStack(spacing: 0) {
             Button {
                 presentationMode.wrappedValue.dismiss()
-                navigateToSelection = true
+                // navigateToSelection = true
+                navigationHelper.open(route: NavigationRoutes.addressPaymentSelection.rawValue)
+               // rootPresentationMode.wrappedValue.open()
             } label: {
                 Text("Devam")
                     .bold()

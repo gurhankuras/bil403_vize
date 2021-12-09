@@ -1,0 +1,61 @@
+//
+//  GIFView.swift
+//  bil403
+//
+//  Created by Gürhan Kuraş on 12/10/21.
+//
+
+
+import SwiftUI
+import WebKit
+
+struct GifImage: UIViewRepresentable {
+    private let name: String
+
+    init(_ name: String) {
+        self.name = name
+    }
+
+    func makeUIView(context: Context) -> WKWebView {
+        let webView = WKWebView()
+        let url = Bundle.main.url(forResource: name, withExtension: "gif")!
+        let data = try! Data(contentsOf: url)
+        webView.load(
+            data,
+            mimeType: "image/gif",
+            characterEncodingName: "UTF-8",
+            baseURL: url.deletingLastPathComponent()
+        )
+        webView.scrollView.isScrollEnabled = false
+        webView.isOpaque = false
+        webView.backgroundColor = UIColor.clear
+
+        return webView
+    }
+
+    func updateUIView(_ uiView: WKWebView, context: Context) {
+        uiView.reload()
+    }
+
+}
+
+/*
+struct GifImage_Previews: PreviewProvider {
+    static var previews: some View {
+        GifImage("pokeball")
+    }
+}
+ */
+
+
+struct Deneme: View {
+    var body: some View {
+        GifImage("pokeball")
+    }
+}
+
+struct Deneme_Previews: PreviewProvider {
+    static var previews: some View {
+        Deneme()
+    }
+}

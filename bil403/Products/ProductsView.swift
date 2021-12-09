@@ -10,13 +10,16 @@ import SwiftUI
 struct ProductsView: View {
     let index: Int
     @State var currentIndex: Int
-    @State private var isShowingSelectPage = false
+    @EnvironmentObject var navigationHelper: NavigationHelper
+
+    // @State private var isShowingSelectPage = false
     
     init(index: Int) {
         self.index = index
         currentIndex = index
         let navBarAppearance = UINavigationBarAppearance()
         navBarAppearance.backButtonAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.white]
+        // print(" INIT \(self.isShowingSelectPage)")
     }
     
    let categories = [
@@ -36,9 +39,23 @@ struct ProductsView: View {
                 }
             }
             .tabViewStyle(PageTabViewStyle())
+            /*
             NavigationLink(destination: PaymentAddressSelectionPage(), isActive: $isShowingSelectPage) { EmptyView() }
+            .isDetailLink(false)
+             */
+            
+            NavigationLink(tag: NavigationRoutes.addressPaymentSelection.rawValue, selection: $navigationHelper.route) {
+                PaymentAddressSelectionPage()
+            } label: {
+                EmptyView()
+            }
+            
+
             
         }
+        .onDisappear(perform: {
+            print("NOLUYOR LAAAN")
+        })
         .toolbar { // <2>
             ToolbarItem(placement: .principal) { // <3>
                 Text("Ürünler")
@@ -46,9 +63,12 @@ struct ProductsView: View {
                     .foregroundColor(.white)
             }
             ToolbarItem(placement: .navigationBarTrailing) {
-                CartIcon(navigateToSelection: $isShowingSelectPage)
+                CartIcon(
+                    /*navigateToSelection: $isShowingSelectPage
+                     */)
             }
         }
+        //.environment(\.rootPresentationMode, self.$isShowingSelectPage)
     }
     
     private func handleGesture(translation: DragGesture.Value) {

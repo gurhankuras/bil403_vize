@@ -9,10 +9,11 @@ import SwiftUI
 
 struct ContentView: View {
     init() {
+        print("ContentView")
         UITabBar.appearance().backgroundColor = UIColor.white
     }
     var body: some View {
-        NavigationView {
+        //NavigationView {
             TabView {
                 HomeView()
                     .tabItem {
@@ -32,9 +33,8 @@ struct ContentView: View {
             }
             .shadow(radius: 2)
             
-        }
+        //}
         .accentColor(appPurple)
-             
     }
 }
 

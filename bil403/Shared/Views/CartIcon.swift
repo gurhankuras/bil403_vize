@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CartIcon: View {
     @State var cartIsOpen: Bool = false
-    @Binding var navigateToSelection: Bool
+    // @Binding var navigateToSelection: Bool
     
     var body: some View {
       
@@ -44,7 +44,9 @@ struct CartIcon: View {
         .fullScreenCover(isPresented: $cartIsOpen) {
             
         } content: {
-            CartPage(navigateToSelection: $navigateToSelection)
+            CartPage(
+                /*navigateToSelection: $navigateToSelection
+                 */)
         }
 
     }

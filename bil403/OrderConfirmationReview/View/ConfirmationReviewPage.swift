@@ -8,7 +8,11 @@
 import SwiftUI
 
 struct ConfirmationReviewPage: View {
-    @Environment(\.presentationMode) var presentationMode;
+    @Environment(\.presentationMode) var presentationMode
+//    @Environment(\.rootPresentationMode) var rootPresentationMode;
+    @EnvironmentObject var navigationHelper: NavigationHelper
+    @State var isLoading = false
+    
     let address =
         Address(id: "2ff",
                 address: "Hürriyet, Kaya sk. No: 12, 34876 Kartal/İstanbul/İstanbul")
@@ -16,27 +20,42 @@ struct ConfirmationReviewPage: View {
             PaymentMethod(id: "4ggh", name: "BKM Express", firstSixDigits: "425245", lastThreeDigits: "324")
     
     var body: some View {
-        VStack {
-            ScrollView {
-                CartProductView()
-                CartProductView()
-                CartProductView()
-                CartProductView()
-                CartProductView()
-                CartProductView()
+        ZStack {
+            VStack {
+                ScrollView {
+                    CartProductView()
+                    CartProductView()
+                    CartProductView()
+                    CartProductView()
+                    CartProductView()
+                    CartProductView()
+                }
+                AddressTile2(address: address)
+                PaymentMethodTile2(method: paymentMethod)
+                //Spacer()
+                Button {
+                    isLoading.toggle()
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+                        isLoading.toggle()
+                        // navigationHelper.close()
+                        presentationMode.wrappedValue.dismiss()
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                    
+                    // rootPresentationMode.wrappedValue.close()
+                } label: {
+                    ButtonUIView(text: "Onayla".uppercased())
+                }
+                
+                // PaymentMethodTile(
             }
-            AddressTile2(address: address)
-            PaymentMethodTile2(method: paymentMethod)
-            //Spacer()
-            Button {
-                presentationMode.wrappedValue.dismiss()
-            } label: {
-                ButtonUIView(text: "Onayla".uppercased())                
+            .navigationTitle("Doğrulama")
+            
+            if isLoading {
+                AppAlert()
             }
-
-            // PaymentMethodTile(
         }
-        .navigationTitle("Doğrulama")
     }
 }
 

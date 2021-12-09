@@ -14,50 +14,63 @@ struct SearchProductPage: View {
     //@FocusState private var searchFieldFocused = true
 
     init() {
+        // UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.red]
+        // UINavigationBar.appearance().titleTextAttributes = [ .backgroundColor: UIColor.purple]
     }
     
     var body: some View {
-        VStack {
-            HStack {
-                Spacer()
-                Text("Arama")
-                    .fontWeight(.bold)
-                    .foregroundColor(.white)
-                Spacer()
-            }
-            .padding(.bottom, 5)
-            .background(appPurple)
-            HStack(spacing: 0) {
-                Image(systemName: "magnifyingglass")
-                    .foregroundColor(appPurple)
-                    .scaleEffect(1.0)
-                TextField(
-                    "Ürün Ara",
-                    text: $searchText
-                )
-                    //.focused($searchFieldFocused)
-                    .font(.subheadline)
-                    .onSubmit {
-                        
-                    }
-                    .textInputAutocapitalization(.never)
-                    .disableAutocorrection(true)
-                    .padding(.vertical)
-                    .padding(.leading, 7)
-                  
-                 
-            }
-            .frame(maxWidth: .infinity)
+        NavigationView {
             
-            .padding(.horizontal)
-            //.background()
-            //.clipShape(RoundedRectangle(cornerRadius: 10))
-            //.shadow(radius: 2, x: 0, y: 3)
-            .background(Color.white)
-            .cornerRadius(2.0)
-            .shadow(radius: 3)
-               
-            Spacer()
+            VStack {
+                
+                HStack {
+                    Spacer()
+                    Text("Arama")
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                    Spacer()
+                }
+                .padding(.vertical, 15)
+                
+                .background(appPurple)
+                
+                HStack(spacing: 0) {
+                    Image(systemName: "magnifyingglass")
+                        .foregroundColor(appPurple)
+                        .scaleEffect(1.0)
+                    TextField(
+                        "Ürün Ara",
+                        text: $searchText
+                    )
+                    //.focused($searchFieldFocused)
+                        .font(.subheadline)
+                        .onSubmit {
+                            
+                        }
+                        .textInputAutocapitalization(.never)
+                        .disableAutocorrection(true)
+                        .padding(.vertical)
+                        .padding(.leading, 7)
+                    
+                    
+                }
+                .frame(maxWidth: .infinity)
+                
+                .padding(.horizontal)
+                //.background()
+                //.clipShape(RoundedRectangle(cornerRadius: 10))
+                //.shadow(radius: 2, x: 0, y: 3)
+                .background(Color.white)
+                .cornerRadius(2.0)
+                .shadow(radius: 3)
+                
+                NavigationLink("asdasdas") {
+                    AppAlert()
+                }
+                Spacer()
+            }
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarHidden(true)
         }
     }
 }

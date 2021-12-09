@@ -44,6 +44,8 @@ struct ProductDetailsToolbar: View {
     var body: some View {
         HStack {
             Button {
+                print("TIKLADIM")
+                print(presentationMode.wrappedValue)
                 presentationMode.wrappedValue.dismiss()
             } label: {
                 Image(systemName: "xmark")
