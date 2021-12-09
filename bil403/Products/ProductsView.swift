@@ -10,6 +10,7 @@ import SwiftUI
 struct ProductsView: View {
     let index: Int
     @State var currentIndex: Int
+    @State private var isShowingSelectPage = false
     
     init(index: Int) {
         self.index = index
@@ -35,6 +36,7 @@ struct ProductsView: View {
                 }
             }
             .tabViewStyle(PageTabViewStyle())
+            NavigationLink(destination: PaymentAddressSelectionPage(), isActive: $isShowingSelectPage) { EmptyView() }
             
         }
         .toolbar { // <2>
@@ -44,7 +46,7 @@ struct ProductsView: View {
                     .foregroundColor(.white)
             }
             ToolbarItem(placement: .navigationBarTrailing) {
-               CartIcon()
+                CartIcon(navigateToSelection: $isShowingSelectPage)
             }
         }
     }
@@ -57,12 +59,12 @@ struct ProductsView: View {
 struct CategoryTab: View {
     let name: String
     let index: Int
-    var selected: Binding<Int>
+    @Binding var selected: Int
     
     var body: some View {
         Button {
             withAnimation {
-                self.selected.wrappedValue = index
+                self.selected = index
             }
             print("Selected")
         } label: {
@@ -74,7 +76,7 @@ struct CategoryTab: View {
                 
                     Rectangle()
                         .frame(width: .infinity, height: 3)
-                        .foregroundColor(selected.wrappedValue == index ? .yellow : appPurple)
+                        .foregroundColor(selected == index ? .yellow : appPurple)
                 
                     
             }

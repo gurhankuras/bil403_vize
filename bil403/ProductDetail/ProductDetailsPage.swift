@@ -104,15 +104,7 @@ struct AddCartLongButton: View {
         Button {
             self.countInCart = countInCart + 1
         } label: {
-            Text("Sepete Ekle")
-                .fontWeight(.bold)
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical)
-                .background(appPurple)
-                .padding()
-            
-            //.padding()
+            ButtonUIView(text: "Sepete Ekle")
         }
     }
 }
@@ -158,5 +150,18 @@ struct IncrementDecrementProductButtonGroup: View {
         .background(Color.white)
         .cornerRadius(15.0)
         .shadow(color: .black.opacity(0.1), radius: 10)
+    }
+}
+
+struct ButtonUIView: View {
+    let text: String
+    var body: some View {
+        Text(text)
+            .fontWeight(.bold)
+            .foregroundColor(.white)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical)
+            .background(appPurple)
+            .padding()
     }
 }

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CartPage: View {
-    
+    @Binding var navigateToSelection: Bool
     var body: some View {
             VStack {
                 CartPageNavBar()
@@ -21,41 +21,59 @@ struct CartPage: View {
                     .background(.white)
                 }
                 
+                //NavigationLink {
+                    //PaymentAddressSelectionPage()
+                //} label: {
+                CartPageBottomButton(navigateToSelection: $navigateToSelection)
+                //}
+                
                 // CartPage
-                HStack(spacing: 0) {
-                    Button {
-                        
-                    } label: {
-                        Text("Devam")
-                            .bold()
-                            .foregroundColor(.white)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(appPurple)
-                    }
-
-                    Text("$5.65")
-                        .foregroundColor(appPurple)
-                        .bold()
-                        .padding()
-                        //.frame(maxWidth: .infinity)
-                        .background(Color(.systemGray6))
-                        
-                }
-                .frame(maxWidth: .infinity)
-                .frame(height: 50)
-                .clipShape(RoundedRectangle(cornerRadius: 10))
-                .shadow(radius: 5)
-                .padding(10)
-                .background(offWhite)
+                
+                
             }
            .background(offWhite)
     }
 }
 
+struct CartPageBottomButton: View {
+    @Binding var navigateToSelection: Bool
+    @Environment(\.presentationMode) var presentationMode;
+    
+    var body: some View {
+        HStack(spacing: 0) {
+            Button {
+                presentationMode.wrappedValue.dismiss()
+                navigateToSelection = true
+            } label: {
+                Text("Devam")
+                    .bold()
+                    .foregroundColor(.white)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(appPurple)
+            }
+
+            Text("$5.65")
+                .foregroundColor(appPurple)
+                .bold()
+                .padding()
+                //.frame(maxWidth: .infinity)
+                .background(Color(.systemGray6))
+                
+        }
+        .frame(maxWidth: .infinity)
+        .frame(height: 50)
+        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .shadow(radius: 5)
+        .padding(10)
+        .background(offWhite)
+    }
+}
+
+/*
 struct CartPage_Previews: PreviewProvider {
     static var previews: some View {
         CartPage()
     }
 }
-
+*/

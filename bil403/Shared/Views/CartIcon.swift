@@ -9,6 +9,8 @@ import SwiftUI
 
 struct CartIcon: View {
     @State var cartIsOpen: Bool = false
+    @Binding var navigateToSelection: Bool
+    
     var body: some View {
       
         //ZStack {
@@ -42,14 +44,16 @@ struct CartIcon: View {
         .fullScreenCover(isPresented: $cartIsOpen) {
             
         } content: {
-            CartPage()
+            CartPage(navigateToSelection: $navigateToSelection)
         }
 
     }
 }
 
+/*
 struct CartIcon_Previews: PreviewProvider {
     static var previews: some View {
         CartIcon()
     }
 }
+*/

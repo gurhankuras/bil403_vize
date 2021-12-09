@@ -1,0 +1,109 @@
+//
+//  ConfirmationReviewPage.swift
+//  bil403
+//
+//  Created by Gürhan Kuraş on 12/9/21.
+//
+
+import SwiftUI
+
+struct ConfirmationReviewPage: View {
+    @Environment(\.presentationMode) var presentationMode;
+    let address =
+        Address(id: "2ff",
+                address: "Hürriyet, Kaya sk. No: 12, 34876 Kartal/İstanbul/İstanbul")
+     let paymentMethod =
+            PaymentMethod(id: "4ggh", name: "BKM Express", firstSixDigits: "425245", lastThreeDigits: "324")
+    
+    var body: some View {
+        VStack {
+            ScrollView {
+                CartProductView()
+                CartProductView()
+                CartProductView()
+                CartProductView()
+                CartProductView()
+                CartProductView()
+            }
+            AddressTile2(address: address)
+            PaymentMethodTile2(method: paymentMethod)
+            //Spacer()
+            Button {
+                presentationMode.wrappedValue.dismiss()
+            } label: {
+                ButtonUIView(text: "Onayla".uppercased())                
+            }
+
+            // PaymentMethodTile(
+        }
+        .navigationTitle("Doğrulama")
+    }
+}
+
+struct ConfirmationReviewPage_Previews: PreviewProvider {
+    static var previews: some View {
+        ConfirmationReviewPage()
+    }
+}
+
+struct PaymentMethodTile2: View {
+    
+    let method: PaymentMethod
+    
+    var body: some View {
+        HStack {
+            Image(systemName: "creditcard.fill")
+                .padding(.horizontal, 5)
+            Divider()
+                .frame(height: 50)
+            VStack(alignment: .leading, spacing: 3) {
+                Text(method.name)
+                    .bold()
+                    .font(.subheadline)
+                    .foregroundColor(.black)
+                    .lineLimit(1)
+                
+                Text(method.maskedCardNumber)
+                    .font(.caption)
+                    .foregroundColor(
+                        Color(.systemGray))
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+            }
+            Spacer()
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.horizontal)
+    }
+}
+
+
+struct AddressTile2: View {
+    let address: Address
+    
+    var body: some View {
+        HStack {
+            Image(systemName: "house.fill")
+                .padding(.horizontal, 5)
+            Divider()
+                .frame(height: 50)
+            
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Ev")
+                    .bold()
+                    .font(.subheadline)
+                    .foregroundColor(.black)
+                    
+                Text(address.address)
+                    .font(.footnote)
+                    .foregroundColor(
+                        Color(.systemGray))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+         
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.horizontal)
+        .padding(.vertical, 5)
+    }
+}
