@@ -33,6 +33,9 @@ struct CartPageNavBar: View {
                     .font(.subheadline)
                     .foregroundColor(.white)
             }
+            .opacity(cart.isEmpty ? 0.5 : 1)
+            .disabled(cart.isEmpty)
+            
             
             
         }

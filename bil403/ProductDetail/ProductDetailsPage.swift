@@ -8,35 +8,42 @@
 import SwiftUI
 
 struct ProductDetailsPage: View {
-    let product: Product
+    @Binding var product: Product?
     @State var countInCart: Int = 0
     
     var body: some View {
-        ZStack {
-            Color(red: 240/255, green: 241/255, blue: 242/255).ignoresSafeArea()
-            VStack {
-                ProductDetailsToolbar()
-                ProductDetails(product)
-                Spacer()
-                
-                if countInCart == 0 {
-                    AddCartLongButton(countInCart: $countInCart, product: product)
+        if product == nil {
+            EmptyView()
+        }
+        else {
+            ZStack {
+                Color(red: 240/255, green: 241/255, blue: 242/255).ignoresSafeArea()
+                VStack {
+                    ProductDetailsToolbar()
+                    ProductDetails(product!)
+                    Spacer()
+                    
+                    if countInCart == 0 {
+                        AddCartLongButton(countInCart: $countInCart, product: product!)
+                    }
+                    else {
+                        IncrementDecrementProductButtonGroup(countInCart: $countInCart, product: product!)
+                    }
+                    
                 }
-                else {
-                    IncrementDecrementProductButtonGroup(countInCart: $countInCart, product: product)
-                }
-
             }
         }
         
     }
 }
 
+/*
 struct ProductDetailsPage_Previews: PreviewProvider {
     static var previews: some View {
         ProductDetailsPage(product: mockProduct)
     }
 }
+ */
 
 struct ProductDetailsToolbar: View {
     @Environment(\.presentationMode) var presentationMode;
@@ -123,14 +130,13 @@ struct IncrementDecrementProductButtonGroup: View {
         HStack(spacing: 0) {
             Button {
                 countInCart = countInCart - 1
-                cart.remove(product: product)
+                
+                // it never happens, if happens there is a bug or external modification
+                try? cart.remove(product: product)
             } label: {
                 Image(systemName: "minus")
                     .frame(maxHeight: .infinity)
                     .padding(16)
-                    //.shadow(radius: 5)
-                
-                    //.border(.gray)
             }
             .opacity(countInCart <= 0 ? 0.5 : 1)
             .disabled(countInCart <= 0)

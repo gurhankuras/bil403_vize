@@ -87,12 +87,21 @@ class MockProductService: ProductServiceProtocol {
       ]
     
     private let products: [Product]
+    private let fails: Bool
     
-    init(data: [Product]? = nil) {
+    init(fails: Bool = false, data: [Product]? = nil) {
         self.products = data ?? defaultProducts
+        self.fails = fails
     }
     
     func getProductsBy(category: String) -> AnyPublisher<[Product], Error> {
+        if fails {
+            return Just([])
+                .tryMap({ publishedProducts in
+                    throw URLError(.badServerResponse)
+                    })
+                .eraseToAnyPublisher()
+        }
         let filteredProducts = products.filter { $0.category == category}
         return Just(filteredProducts)
             .tryMap({ $0 })

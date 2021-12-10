@@ -61,12 +61,14 @@ struct ProductsView: View {
         .onDisappear(perform: {
             print("NOLUYOR LAAAN")
         })
+        //.navigationBarBackButtonHidden(true)
         .toolbar { // <2>
             ToolbarItem(placement: .principal) { // <3>
                 Text("Ürünler")
                     .bold()
                     .foregroundColor(.white)
             }
+           
             ToolbarItem(placement: .navigationBarTrailing) {
                 CartIcon(
                     /*navigateToSelection: $isShowingSelectPage
@@ -75,10 +77,7 @@ struct ProductsView: View {
         }
         //.environment(\.rootPresentationMode, self.$isShowingSelectPage)
     }
-    
-    private func handleGesture(translation: DragGesture.Value) {
-        print("HAHAHAHAHAH")
-    }
+
 }
 
 struct CategoryTab: View {

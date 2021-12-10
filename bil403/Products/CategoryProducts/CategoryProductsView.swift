@@ -45,12 +45,12 @@ struct CategoryProductsView_Previews: PreviewProvider {
 struct ProductsGrid: View {
     @Binding var products: [Product]
     // let data = (1...10).map { "Item \($0)" }
-   let productMock = mockProduct
+    @State var presentedProduct: Product? = nil
     @State var presented: Bool = false
     
-        let columns = [
-            GridItem(.adaptive(minimum: 100))
-        ]
+    let columns = [
+        GridItem(.adaptive(minimum: 100))
+    ]
     
     
     var body: some View {
@@ -58,13 +58,14 @@ struct ProductsGrid: View {
             ForEach(products) { item in
                 Button {
                     presented = true
+                    presentedProduct = item
                 } label: {
                     ProductCard(product: item)
                 }
             }
         }
         .sheet(isPresented: $presented) {
-            ProductDetailsPage(product: productMock)
+            ProductDetailsPage(product: $presentedProduct)
         }
         .padding(.horizontal)
     }

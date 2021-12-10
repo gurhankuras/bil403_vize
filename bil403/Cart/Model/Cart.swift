@@ -40,6 +40,10 @@ struct CartItem: Identifiable {
 }
 
 class Cart: ObservableObject {
+    enum CartError: Error {
+        case keyNotFound
+    }
+    
     @Published var items = [String: CartItem]()
     @Published var loading = false
     @Published var totalAmount = 0.0
@@ -72,19 +76,27 @@ class Cart: ObservableObject {
     }
     
     // TODO: TEST
-    func remove(product: Product) {
+    func remove(product: Product) throws {
         guard let existingItem = items[product.id] else {
-            return
+            throw CartError.keyNotFound
         }
         objectWillChange.send()
         
-        let updatedItem = CartItem(product: existingItem.product, count: existingItem.count - 1)
-        items.updateValue(updatedItem, forKey: product.id)
+        if existingItem.count == 1 {
+            items.removeValue(forKey: existingItem.product.id)
+        }
+        else {
+            let updatedItem = CartItem(product: existingItem.product, count: existingItem.count - 1)
+            items.updateValue(updatedItem, forKey: product.id)
+        }
         totalAmount = calculateTotalAmount()
     }
+
     
-    // TODO: TEST
     func clear() {
+        if items.isEmpty {
+            return
+        }
         items.removeAll()
         totalAmount = calculateTotalAmount()
     }

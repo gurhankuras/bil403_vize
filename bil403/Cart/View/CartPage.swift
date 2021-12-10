@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CartPage: View {
     @EnvironmentObject var cart: Cart
-   // @Binding var navigateToSelection: Bool
+
     var body: some View {
             VStack {
                 CartPageNavBar()
@@ -22,19 +22,7 @@ struct CartPage: View {
                     }
                     .background(.white)
                 }
-                
-                //NavigationLink {
-                    //PaymentAddressSelectionPage()
-                //} label: {
-                CartPageBottomButton(totalAmount: $cart.totalAmount
-                    /*navigateToSelection: $navigateToSelection
-                     */
-                     )
-                //}
-                
-                // CartPage
-                
-                
+                CartPageBottomButton(totalAmount: $cart.totalAmount)
             }
            .background(offWhite)
     }
@@ -42,26 +30,24 @@ struct CartPage: View {
 
 struct CartPageBottomButton: View {
     @EnvironmentObject var navigationHelper: NavigationHelper
+    @EnvironmentObject var cart: Cart
     @Binding var totalAmount: Double
-    // @Binding var navigateToSelection: Bool
     @Environment(\.presentationMode) var presentationMode;
 
-    // @Environment(\.rootPresentationMode) var rootPresentationMode;
     var body: some View {
         HStack(spacing: 0) {
             Button {
                 presentationMode.wrappedValue.dismiss()
-                // navigateToSelection = true
                 navigationHelper.open(route: NavigationRoutes.addressPaymentSelection.rawValue)
-               // rootPresentationMode.wrappedValue.open()
             } label: {
                 Text("Devam")
                     .bold()
                     .foregroundColor(.white)
                     .padding()
                     .frame(maxWidth: .infinity)
-                    .background(appPurple)
+                    .background(appPurple.opacity(cart.isEmpty ? 0.5 : 1))
             }
+            .disabled(cart.isEmpty)
 
             Text("$\(totalAmount.toFixedString(2))")
                 .foregroundColor(appPurple)

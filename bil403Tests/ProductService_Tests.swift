@@ -7,6 +7,7 @@
 
 import XCTest
 @testable import bil403
+
 class ProductService_Tests: XCTestCase {
     
     override func setUpWithError() throws {
@@ -17,7 +18,7 @@ class ProductService_Tests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func test_() throws {
+    func test_ProductService_getProductsBy_() throws {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
