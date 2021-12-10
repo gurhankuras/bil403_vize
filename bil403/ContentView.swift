@@ -8,9 +8,11 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject var cart = Cart()
+    
     init() {
         print("ContentView")
-        UITabBar.appearance().backgroundColor = UIColor.white
+        // UITabBar.appearance().backgroundColor = UIColor.white
     }
     var body: some View {
         //NavigationView {
@@ -35,6 +37,7 @@ struct ContentView: View {
             
         //}
         .accentColor(appPurple)
+        .environmentObject(cart)
     }
 }
 

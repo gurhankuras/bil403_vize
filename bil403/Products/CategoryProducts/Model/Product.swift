@@ -13,4 +13,5 @@ struct Product: Identifiable, Codable {
     let name: String
     let cost: Double
     let additionalInfo: String
+    let category: String
 }

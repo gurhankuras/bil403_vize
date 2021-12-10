@@ -13,29 +13,37 @@ struct ProductCard: View {
     let url = "https://cdn.getir.com/product/5cac8e6603c5fd0001497b73_tr_1638777832255.jpeg"
     var body: some View {
         
-        VStack(alignment: .leading) {
-           
-            ZStack(alignment: .topTrailing) {
-                ProductThumbnail()
-                    .frame(width: 100, height: 100)
-                AddToCartButton()
-            }
-            
-            
-            Text("$\(product.cost.toFixedString(2))")
-                .bold()
-                .font(.subheadline)
-                .foregroundColor(appPurple)
-                .padding(.bottom, 1)
+        //HStack(alignment: .top) {
+            VStack(alignment: .leading) {
+                ZStack(alignment: .topTrailing) {
+                    ProductThumbnail()
+                        .frame(width: 100, height: 100)
+                    AddToCartButton(product: product)
+                }
                 
-            Text("\(product.name)")
-                .font(.caption)
-                .foregroundColor(.black)
-            Text("\(product.additionalInfo)")
-                .foregroundColor(Color(UIColor(.secondary)))
-                .font(.caption)
-        }
-        .padding()
+                Text("$\(product.cost.toFixedString(2))")
+                    .bold()
+                    .font(.subheadline)
+                    .foregroundColor(appPurple)
+                    .padding(.bottom, 1)
+                
+                Text("\(product.name)")
+                    .font(.caption)
+                    .multilineTextAlignment(.leading)
+                    .lineLimit(2)
+                    .foregroundColor(.black)
+                Text("\(product.additionalInfo)")
+                    .foregroundColor(Color(UIColor(.secondary)))
+                    .lineLimit(1)
+                    .multilineTextAlignment(.leading)
+                    .font(.caption)
+                Spacer()
+            }
+            .padding([.bottom, .horizontal])
+            .padding(.top, 5)
+            
+        //}
+        .frame(height: 220)
     }
 }
 
@@ -71,10 +79,12 @@ struct ProductCard_Previews: PreviewProvider {
 }
 
 struct AddToCartButton: View {
+    @EnvironmentObject var cart: Cart
+    let product: Product
+    
     var body: some View {
         Button {
-            
-            
+            cart.add(product: product)
         } label: {
             RoundedRectangle(cornerRadius: 5)
                 .foregroundColor(.white)

@@ -14,7 +14,7 @@ struct CategoryCard: View {
     var body: some View {
     
         NavigationLink {
-            ProductsView(index: index)
+            ProductsView(indexP: index)
         } label: {
             VStack {
                 AsyncImage(url: URL(string: url)) { image in

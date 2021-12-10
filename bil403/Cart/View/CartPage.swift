@@ -8,14 +8,16 @@
 import SwiftUI
 
 struct CartPage: View {
+    @EnvironmentObject var cart: Cart
    // @Binding var navigateToSelection: Bool
     var body: some View {
             VStack {
                 CartPageNavBar()
                 ScrollView {
                     VStack {
-                        ForEach(0..<6) { index in
-                            CartProductView()
+                        // TODO: Find another way
+                        ForEach(cart.toList()) { cartItem in
+                            CartProductView(cartItem: cartItem)
                         }
                     }
                     .background(.white)
@@ -24,7 +26,7 @@ struct CartPage: View {
                 //NavigationLink {
                     //PaymentAddressSelectionPage()
                 //} label: {
-                CartPageBottomButton(
+                CartPageBottomButton(totalAmount: $cart.totalAmount
                     /*navigateToSelection: $navigateToSelection
                      */
                      )
@@ -40,9 +42,10 @@ struct CartPage: View {
 
 struct CartPageBottomButton: View {
     @EnvironmentObject var navigationHelper: NavigationHelper
-
+    @Binding var totalAmount: Double
     // @Binding var navigateToSelection: Bool
     @Environment(\.presentationMode) var presentationMode;
+
     // @Environment(\.rootPresentationMode) var rootPresentationMode;
     var body: some View {
         HStack(spacing: 0) {
@@ -60,7 +63,7 @@ struct CartPageBottomButton: View {
                     .background(appPurple)
             }
 
-            Text("$5.65")
+            Text("$\(totalAmount.toFixedString(2))")
                 .foregroundColor(appPurple)
                 .bold()
                 .padding()

@@ -11,22 +11,24 @@ struct ProductsView: View {
     let index: Int
     @State var currentIndex: Int
     @EnvironmentObject var navigationHelper: NavigationHelper
-
+    let productService: ProductServiceProtocol = MockProductService()
+    
     // @State private var isShowingSelectPage = false
     
-    init(index: Int) {
-        self.index = index
-        currentIndex = index
+    init(indexP: Int) {
+        self.index = indexP
+        _currentIndex = State(initialValue: self.index)
+        // self.currentIndex = indexP
         let navBarAppearance = UINavigationBarAppearance()
         navBarAppearance.backButtonAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.white]
         // print(" INIT \(self.isShowingSelectPage)")
     }
     
    let categories = [
-       "Meyve & Sebze",
-       "Kişisel Bakım",
-       "Atıştırmalık",
-       "Temel Gıda"
+        ProductCategory(name: "Meyve & Sebze", id: ProductCategories.meyveSebze.rawValue),
+        ProductCategory(name: "Kişisel Bakım", id: ProductCategories.kisiselBakim.rawValue),
+        ProductCategory(name: "Atıştırmalık", id: ProductCategories.atistirmalik.rawValue),
+        ProductCategory(name: "Temel Gıda", id: ProductCategories.temelGida.rawValue)
    ]
     
     var body: some View {
@@ -34,11 +36,14 @@ struct ProductsView: View {
             CategoriesSelection(categories: categories, selectedIndex: $currentIndex)
             TabView(selection: $currentIndex.animation()) {
                 ForEach(0..<categories.count, id: \.self) { index in
-                    CategoryProductsView()
+                    CategoryProductsView(category: categories[index], productService: productService)
                         .tag(index)
                 }
             }
             .tabViewStyle(PageTabViewStyle())
+            // .environmentObject(productService)
+            
+            //.environmentObject(<#T##object: ObservableObject##ObservableObject#>)
             /*
             NavigationLink(destination: PaymentAddressSelectionPage(), isActive: $isShowingSelectPage) { EmptyView() }
             .isDetailLink(false)
@@ -111,12 +116,12 @@ struct CategoryTab: View {
 
 struct ProductsView_Previews: PreviewProvider {
     static var previews: some View {
-        ProductsView(index: 1)
+        ProductsView(indexP: 1)
     }
 }
 
 struct CategoriesSelection: View {
-    let categories: [String]
+    let categories: [ProductCategory]
     
     var selectedIndex: Binding<Int>
     
@@ -124,7 +129,7 @@ struct CategoriesSelection: View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack {
                 ForEach(0..<categories.count, id: \.self) { index in
-                    CategoryTab(name: categories[index], index: index, selected: selectedIndex)
+                    CategoryTab(name: categories[index].name, index: index, selected: selectedIndex)
                 }
             }
         }

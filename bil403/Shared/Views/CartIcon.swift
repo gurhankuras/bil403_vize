@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CartIcon: View {
     @State var cartIsOpen: Bool = false
+    @EnvironmentObject var cart: Cart
     // @Binding var navigateToSelection: Bool
     
     var body: some View {
@@ -27,7 +28,7 @@ struct CartIcon: View {
                     .padding(.vertical, 5)
                     .background(.white)
                 ZStack {
-                    Text("$8,00")
+                    Text("$\(cart.totalAmount.toFixedString(2))")
                         .font(.caption)
                         .bold()
                         .foregroundColor(appPurple)

@@ -9,20 +9,27 @@ import SwiftUI
 
 
 struct CartProductView: View {
-    @State var count: Int = 1
+    @State var count: Int
+    let cartItem: CartItem
+    
+    init(cartItem: CartItem) {
+        self.cartItem = cartItem
+        _count = State(initialValue: cartItem.count)
+    }
+    
     var body: some View {
         HStack {
             ProductThumbnail()
                 .frame(width: 100, height: 100)
             VStack(alignment: .leading) {
-                Text("Elma")
+                Text(cartItem.product.name)
                     .font(.caption)
                     .foregroundColor(.black)
-                Text("1 kg")
+                Text(cartItem.product.additionalInfo)
                     .foregroundColor(Color(UIColor(.secondary)))
                     .font(.footnote)
                     .padding(.bottom, 5)
-                Text("$\(16.54.toFixedString(2))")
+                Text("$\(cartItem.product.cost.toFixedString(2))")
                     .bold()
                     .font(.subheadline)
                     .foregroundColor(appPurple)
@@ -31,7 +38,7 @@ struct CartProductView: View {
             }
             .padding(.leading)
             Spacer()
-            IncrementDecrementProductButtonGroup(countInCart: $count)
+            IncrementDecrementProductButtonGroup(countInCart: $count, product: cartItem.product)
                 .scaleEffect(0.7)
             
         }
@@ -41,8 +48,10 @@ struct CartProductView: View {
 
 
 struct CartProductView_Previews: PreviewProvider {
+    static let cartItem = CartItem(product: mockProduct, count: 2)
+    
     static var previews: some View {
-        CartProductView()
+        CartProductView(cartItem: Self.cartItem)
             .previewLayout(.sizeThatFits)
     }
 }

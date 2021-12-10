@@ -10,6 +10,7 @@ import SwiftUI
 
 struct CartPageNavBar: View {
     @Environment(\.presentationMode) var presentationMode;
+    @EnvironmentObject var cart: Cart
     
     var body: some View {
         HStack {
@@ -26,7 +27,7 @@ struct CartPageNavBar: View {
                 .foregroundColor(.white)
             Spacer()
             Button {
-                
+                cart.clear()
             } label: {
                 Image(systemName: "trash.fill")
                     .font(.subheadline)

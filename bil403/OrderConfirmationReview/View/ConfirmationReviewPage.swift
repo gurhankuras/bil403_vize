@@ -23,12 +23,14 @@ struct ConfirmationReviewPage: View {
         ZStack {
             VStack {
                 ScrollView {
+                    /*
+                    CartProductView(cartItem: )
                     CartProductView()
                     CartProductView()
                     CartProductView()
                     CartProductView()
                     CartProductView()
-                    CartProductView()
+                     */
                 }
                 AddressTile2(address: address)
                 PaymentMethodTile2(method: paymentMethod)

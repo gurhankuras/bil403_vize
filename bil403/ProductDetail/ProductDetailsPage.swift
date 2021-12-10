@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ProductDetailsPage: View {
     let product: Product
-    @State var countInCart: Int = 1
+    @State var countInCart: Int = 0
     
     var body: some View {
         ZStack {
@@ -20,10 +20,10 @@ struct ProductDetailsPage: View {
                 Spacer()
                 
                 if countInCart == 0 {
-                    AddCartLongButton(countInCart: $countInCart)
+                    AddCartLongButton(countInCart: $countInCart, product: product)
                 }
                 else {
-                    IncrementDecrementProductButtonGroup(countInCart: $countInCart)
+                    IncrementDecrementProductButtonGroup(countInCart: $countInCart, product: product)
                 }
 
             }
@@ -101,10 +101,13 @@ struct ProductDetails: View {
 
 struct AddCartLongButton: View {
     @Binding var countInCart: Int
-
+    @EnvironmentObject var cart: Cart
+    let product: Product
+    
     var body: some View {
         Button {
             self.countInCart = countInCart + 1
+            cart.add(product: product)
         } label: {
             ButtonUIView(text: "Sepete Ekle")
         }
@@ -113,11 +116,14 @@ struct AddCartLongButton: View {
 
 struct IncrementDecrementProductButtonGroup: View {
     @Binding var countInCart: Int
+    @EnvironmentObject var cart: Cart
+    let product: Product
 
     var body: some View {
         HStack(spacing: 0) {
             Button {
                 countInCart = countInCart - 1
+                cart.remove(product: product)
             } label: {
                 Image(systemName: "minus")
                     .frame(maxHeight: .infinity)
@@ -126,6 +132,8 @@ struct IncrementDecrementProductButtonGroup: View {
                 
                     //.border(.gray)
             }
+            .opacity(countInCart <= 0 ? 0.5 : 1)
+            .disabled(countInCart <= 0)
             
             Text("\(countInCart)")
                 .foregroundColor(.white)
@@ -138,6 +146,7 @@ struct IncrementDecrementProductButtonGroup: View {
             
             Button {
                 countInCart = countInCart + 1
+                cart.add(product: product)
             } label: {
                 Image(systemName: "plus")
                     .frame(maxHeight: .infinity )
