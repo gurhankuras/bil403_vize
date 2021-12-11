@@ -27,7 +27,8 @@ struct ContentView: View {
                         Image(systemName: "magnifyingglass")
                     }
                 
-                Text("User Tab")
+                //Text("User Tab")
+                  UserProfilePage()
                     .tabItem {
                         Image(systemName: "person.fill")
                     }

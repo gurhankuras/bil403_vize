@@ -10,6 +10,8 @@ import SwiftUI
 struct ProductDetailsPage: View {
     @Binding var product: Product?
     @State var countInCart: Int = 0
+    // The environment is passed down when the body is called, so it doesn't yet exist during the initialization phase of the View struct. (use onAppear)
+    @EnvironmentObject var cart: Cart
     
     var body: some View {
         if product == nil {
@@ -32,9 +34,19 @@ struct ProductDetailsPage: View {
                     
                 }
             }
+            .onAppear {
+                guard let id = product?.id else {
+                    //_countInCart = State(initialValue: 0)
+                    countInCart = 0
+                    return
+                }
+                countInCart = self.cart.items[id]?.count ?? 0
+                // _countInCart = State(initialValue: self.cart.items[id]?.count ?? 0)
+            }
         }
         
     }
+
 }
 
 /*
@@ -73,7 +85,6 @@ struct ProductDetailsToolbar: View {
 
 struct ProductDetails: View {
     let product: Product
-    
     init(_ product: Product) {
         self.product = product
     }
