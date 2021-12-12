@@ -91,11 +91,19 @@ struct ProductDetails: View {
     
     var body: some View {
         VStack(spacing: 0) {
+            /*
             Image("apple")
                 .resizable()
                 .frame(width: UIScreen.main.bounds.width * 0.4,
                        height: UIScreen.main.bounds.width * 0.4)
                 .scaledToFit()
+             */
+            
+            ProductThumbnail(url: product.image)
+                .frame(width: UIScreen.main.bounds.width * 0.35,
+                       height: UIScreen.main.bounds.width * 0.35)
+                .scaledToFit()
+                .padding(.bottom, 10)
             
             Text("$\(product.cost.toFixedString(2))")
                 .bold()

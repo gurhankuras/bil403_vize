@@ -8,29 +8,47 @@
 import SwiftUI
 
 struct CategoryProductsView: View {
-    let category: ProductCategory
+    let category: Category
     let productService: ProductServiceProtocol
     @StateObject var productsViewModel: ProductsViewModel
     
     
-    init(category: ProductCategory, productService: ProductServiceProtocol) {
+    init(category: Category, productService: ProductServiceProtocol) {
         self.category = category
         self.productService = productService
          _productsViewModel = StateObject(wrappedValue:
                                           ProductsViewModel(categoryId: category.id ,productService: productService))
     }
     var body: some View {
-        ScrollView {
-            
-            ProductsGrid(products: $productsViewModel.products)
-                .padding(.top, 10)
-        }
+        /*
+        GeometryReader { geometry in
+                    ScrollView(.vertical) {
+                        Rectangle()
+                            .frame(width: geometry.size.width, height: 0.01)
+                        ForEach($productsViewModel.products) { o in
+                            Text("\(o.id)")
+                        }
+                    }
+                }
+         */
+        
+            ScrollView {
+                if (productsViewModel.loading) {
+                    ProgressView()
+                }
+                else {
+                    ProductsGrid(products: $productsViewModel.products)
+                        .padding(.top, 10)
+                }
+            }
+         
+        
         
     }
 }
 
 struct CategoryProductsView_Previews: PreviewProvider {
-    static let category = ProductCategory(name: "Meyve & Sebze", id: ProductCategories.kisiselBakim.rawValue)
+    static let category = Category(id: ProductCategories.kisiselBakim.rawValue, title: "Meyve & Sebze",image: "" )
     
     static let productService = MockProductService()
     

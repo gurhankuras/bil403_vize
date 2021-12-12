@@ -16,7 +16,7 @@ struct ProductCard: View {
         //HStack(alignment: .top) {
             VStack(alignment: .leading) {
                 ZStack(alignment: .topTrailing) {
-                    ProductThumbnail()
+                    ProductThumbnail(url: product.image)
                         .frame(width: 100, height: 100)
                     AddToCartButton(product: product)
                 }
@@ -48,9 +48,10 @@ struct ProductCard: View {
 }
 
 struct ProductThumbnail: View {
+    let url: String
     var body: some View {
         
-        /*
+        
         AsyncImage(url: URL(string: url)) { image in
             image
                 .resizable()
@@ -60,21 +61,22 @@ struct ProductThumbnail: View {
         } placeholder: {
             ProgressView()
         }
-         */
-        
+         
+        /*
         Image("apple")
             .resizable()
             .scaledToFit()
             .clipShape(RoundedRectangle(cornerRadius: 5))
             .shadow(radius: 1)
             //.frame(width: 100, height: 100)
+         */
     }
 }
 
 struct ProductCard_Previews: PreviewProvider {
     static var previews: some View {
         ProductCard(product: mockProduct)
-            .previewLayout(.sizeThatFits)
+            
     }
 }
 

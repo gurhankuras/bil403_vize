@@ -7,40 +7,8 @@
 
 import SwiftUI
 
-
-struct Address: Identifiable {
-    let id: String
-    let address: String
-}
-
-struct PaymentMethod: Identifiable {
-    let id: String
-    let name: String
-    let firstSixDigits: String
-    let lastThreeDigits: String
-    
-    var maskedCardNumber: String {
-        return "\(firstSixDigits)\(String.init(repeating: "*", count: 8))\(lastThreeDigits)"
-    }
-}
-
 struct PaymentAddressSelectionPage: View {
-    let addresses = [
-        Address(id: "2ff",
-                address: "Hürriyet, Kaya sk. No: 12, 34876 Kartal/İstanbul/İstanbul"),
-        Address(id: "43f", address: "sadasdas"),
-        Address(id: "5dsf", address: "sdfsdfsd")
-    ]
-    
-    @State var selectedAddressId = "2ff"
-    @State var selectedPaymentId = "6fssr"
-    
-    let paymentMethods = [
-        PaymentMethod(id: "4ggh", name: "BKM Express", firstSixDigits: "425245", lastThreeDigits: "324"),
-        PaymentMethod(id: "45fs", name: "Finans", firstSixDigits: "732537", lastThreeDigits: "234"),
-        PaymentMethod(id: "6fssr", name: "Paraf", firstSixDigits: "945324", lastThreeDigits: "742"),
-    ]
-    
+    @StateObject var vm: PaymentAddressSelectionViewModel = PaymentAddressSelectionViewModel()
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -49,7 +17,7 @@ struct PaymentAddressSelectionPage: View {
                 .bold()
                 .padding(.horizontal)
                 .padding(.vertical, 10)
-            AddressList(selectedId: $selectedAddressId, addresses: addresses)
+            AddressList(selected: $vm.selectedAddress, addresses: vm.addresses)
                 .padding(.bottom)
          
             Text("Ödeme Metodları")
@@ -57,12 +25,12 @@ struct PaymentAddressSelectionPage: View {
                 .bold()
                 .padding(.horizontal)
                 .padding(.vertical, 10)
-            PaymentMethodList(selectedId: $selectedPaymentId, methods: paymentMethods)
+            PaymentMethodList(selected: $vm.selectedMethod, methods: vm.paymentMethods)
             
             Spacer()
 
             NavigationLink {
-                ConfirmationReviewPage()
+                ConfirmationReviewPage(address: vm.selectedAddress, paymentMethod: vm.selectedMethod)
             } label: {
                 ButtonUIView(text: "Devam Et")
             }
@@ -73,7 +41,7 @@ struct PaymentAddressSelectionPage: View {
 
 
 struct PaymentMethodList: View {
-    @Binding var selectedId: String
+    @Binding var selected: PaymentMethod
     let methods: [PaymentMethod]
     
     var body: some View {
@@ -82,7 +50,7 @@ struct PaymentMethodList: View {
                     /*
                     AddressTile(selectedId: $selectedId, address: address)
                      */
-                    PaymentMethodTile(selectedId: $selectedId, method: method)
+                    PaymentMethodTile(selected: $selected, method: method)
                     Divider()
                 }
             }
@@ -91,16 +59,16 @@ struct PaymentMethodList: View {
 }
 
 struct PaymentMethodTile: View {
-    @Binding var selectedId: String
+    @Binding var selected: PaymentMethod
     
     let method: PaymentMethod
     
     var body: some View {
         Button {
-            selectedId = method.id
+            selected = method
         } label: {
             HStack {
-                Image(systemName: selectedId == method.id ? "checkmark.circle": "circle")
+                Image(systemName: selected.id == method.id ? "checkmark.circle": "circle")
                 Image(systemName: "creditcard.fill")
                 VStack(alignment: .leading, spacing: 3) {
                     Text(method.name)
@@ -117,7 +85,7 @@ struct PaymentMethodTile: View {
                         .truncationMode(.tail)
                 }
                 Spacer()
-                Image(systemName: "trash.fill")
+                // Image(systemName: "trash.fill")
             }
             .frame(maxWidth: .infinity)
             .padding(.horizontal)
@@ -134,13 +102,13 @@ struct PaymentAddressSelectionPage_Previews: PreviewProvider {
 }
 
 struct AddressList: View {
-    @Binding var selectedId: String
+    @Binding var selected: Address
     let addresses: [Address]
     
     var body: some View {
             VStack(alignment: .leading) {
                 ForEach(addresses) { address in
-                    AddressTile(selectedId: $selectedId, address: address)
+                    AddressTile(selected: $selected, address: address)
                     Divider()
                 }
             }
@@ -151,16 +119,16 @@ struct AddressList: View {
 }
 
 struct AddressTile: View {
-    @Binding var selectedId: String
+    @Binding var selected: Address
     
     let address: Address
     
     var body: some View {
         Button {
-            selectedId = address.id
+            selected = address
         } label: {
             HStack {
-                Image(systemName: selectedId == address.id ? "checkmark.circle": "circle")
+                Image(systemName: selected.id == address.id ? "checkmark.circle": "circle")
                 Image(systemName: "house.fill")
                 Divider()
                     .frame(height: 30)
@@ -178,7 +146,7 @@ struct AddressTile: View {
                     .truncationMode(.tail)
                 
                 Spacer()
-                Image(systemName: "trash.fill")
+              //  Image(systemName: "trash.fill")
             }
             .frame(maxWidth: .infinity)
             .padding(.horizontal)

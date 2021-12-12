@@ -1,54 +1,23 @@
 //
-//  ProductsViewModel.swift
+//  SearchViewModel.swift
 //  bil403
 //
-//  Created by Gürhan Kuraş on 12/10/21.
+//  Created by Gürhan Kuraş on 12/12/21.
 //
 
 import Foundation
 import Combine
 
-class ProductsViewModel: ObservableObject {
+class SearchViewModel: ObservableObject {
     @Published var products = [Product]()
     @Published var loading: Bool = false
 
-    let categoryId: String
-    let productService: ProductServiceProtocol
     
     var cancellables = Set<AnyCancellable>()
     
-    init(categoryId: String, productService: ProductServiceProtocol) {
-        self.categoryId = categoryId
-        self.productService = productService
-        loadProducts()
-    }
     
-    /*
-    func loadProducts() {
-        loading = true
-        productService.getProductsBy(category: categoryId)
-            .sink { [weak self] completion  in
-                switch completion {
-                case .finished:
-                    print("finished")
-                    
-                case .failure(let error):
-                    print(error)
-                    print("HATA OLDU")
-                }
-                print("COMPLETION: \(completion)")
-                self?.loading = false
-            } receiveValue: { [weak self] returnedPosts in
-                print(returnedPosts)
-                self?.products = returnedPosts
-            }
-            .store(in: &cancellables)
-
-    }
-     */
-    
-    func loadProducts() {
-        guard let request = makeGetRequest(urlStr: ApiURL.products(by: categoryId)) else {
+    func loadProducts(query: String) {
+        guard let request = makeGetRequest(urlStr: ApiURL.searchProduct(q: query)) else {
             return
         }
         
@@ -69,8 +38,8 @@ class ProductsViewModel: ObservableObject {
                 print("COMPLETION: \(completion)")
                 self?.loading = false
     
-            } receiveValue: {[weak self] prods in
-                self?.products = prods
+            } receiveValue: {[weak self] products in
+                self?.products = products
             }
             .store(in: &cancellables)
         
@@ -91,12 +60,6 @@ class ProductsViewModel: ObservableObject {
             print("Error: cannot create URL")
             return nil
         }
-        
-        /*
-        guard let parameters = processInputs() else {
-            return nil
-        }
-         */
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"

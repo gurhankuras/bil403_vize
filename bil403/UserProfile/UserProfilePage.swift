@@ -8,16 +8,21 @@
 import SwiftUI
 
 struct User: Identifiable, Decodable {
-    let id: String
+    let id: Int
     let name: String
     let email: String
     let phoneNumber: String
 }
 
 struct UserProfilePage: View {
+    /*
     let user =
-    User(id: "3223", name: "Gürhan Kuraş", email: "gurhankuras@hotmail.com", phoneNumber: "05456877747")
-    let ab = ["asdsa", "asdasd", "sadasd"]
+    User(id: 3223, name: "Gürhan Kuraş", email: "gurhankuras@hotmail.com", phoneNumber: "05456877747")
+    */
+    
+    @StateObject var vm: ProfileViewModel = ProfileViewModel()
+    
+     let ab = ["asdsa", "asdasd", "sadasd"]
     var body: some View {
         
         NavigationView {
@@ -34,7 +39,7 @@ struct UserProfilePage: View {
                             .cornerRadius(5)
                             .shadow(radius: 1)
                             .padding(.trailing, 8)
-                        Text(user.name)
+                        Text(vm.user?.name ?? "-")
                             .bold()
                             .lineLimit(1)
                         
@@ -45,7 +50,7 @@ struct UserProfilePage: View {
                     
                     Divider().padding(.horizontal)
                     UserInfoRow(icon: "mail.fill",
-                                text: Text(user.email)
+                                text: Text(vm.user?.email ?? "-")
                                     .font(.caption)
                                     .foregroundColor(Color(.systemGray))
                                     .fontWeight(.semibold)
@@ -54,7 +59,7 @@ struct UserProfilePage: View {
                         .padding(5)
                     Divider().padding(.horizontal)
                     UserInfoRow(icon: "candybarphone",
-                                text: Text(user.phoneNumber)
+                                text: Text(vm.user?.phoneNumber ?? "-")
                                     .font(.caption)
                                     .foregroundColor(Color(.systemGray))
                                     .fontWeight(.semibold))
@@ -63,7 +68,7 @@ struct UserProfilePage: View {
                 
                 ShadowedVStack {
                     NavigationLink {
-                        Text("sadasdas")
+                        MyAddressesPage()
                     } label: {
                         UserInfoRow(icon: "location.fill", text: Text("Adreslerim")
                                         .font(.caption)
@@ -74,7 +79,7 @@ struct UserProfilePage: View {
                     }
                     Divider().padding(.horizontal)
                     NavigationLink {
-                        Text("sadasdas")
+                        MyPaymentMethodsPage()
                     } label: {
                         UserInfoRow(icon: "creditcard.fill", text: Text("Ödeme Yöntemlerim")
                                         .font(.caption)
@@ -84,8 +89,9 @@ struct UserProfilePage: View {
                             .padding(5)
                     }
                     Divider().padding(.horizontal)
+                    /*
                     NavigationLink {
-                        Text("Ge")
+                        MyOrdersPage()
                     } label: {
                         UserInfoRow(icon: "bag.fill", text: Text("Geçmiş Siparişlerim")
                                         .font(.caption)
@@ -94,6 +100,7 @@ struct UserProfilePage: View {
                         )
                             .padding(5)
                     }
+                     */
                 }
                 .tint(appPurple)
                 .padding(.vertical)

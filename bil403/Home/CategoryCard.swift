@@ -8,26 +8,28 @@
 import SwiftUI
 
 struct CategoryCard: View {
-    let index: Int
-    let url = "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Culinary_fruits_front_view.jpg/640px-Culinary_fruits_front_view.jpg"
+    let category: Category
+    let categories: [Category]
     
     var body: some View {
     
         NavigationLink {
-            ProductsView(indexP: index)
+            ProductsView(category: category, categories: categories)
         } label: {
             VStack {
-                AsyncImage(url: URL(string: url)) { image in
+                AsyncImage(url: URL(string: category.image)) { image in
                     image
                         .resizable()
                         .scaledToFit()
+                        .frame(width: 75, height: 75, alignment: .center)
                         .clipShape(RoundedRectangle(cornerRadius: 5))
                         .shadow(radius: 5)
                 } placeholder: {
                     ProgressView()
                 }
-                Text("Meyve")
-                    .font(.subheadline)
+                Text(category.title)
+                    .font(.caption)
+                    .fontWeight(.semibold)
             }.foregroundColor(appPurple)
         }
         .tint(appPurple)
@@ -37,9 +39,11 @@ struct CategoryCard: View {
         
     }
 }
-
+/*
 struct CategoryCard_Previews: PreviewProvider {
     static var previews: some View {
-        CategoryCard(index: 4)
+        CategoryCard(category: Category(title: "Meyve & Sebze", image: "https://cdn.getir.com/cat/5928113e616cab00041ec6de_1619242870968_1619242871055.jpeg"))
     }
 }
+
+*/

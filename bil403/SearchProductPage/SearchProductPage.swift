@@ -9,13 +9,17 @@ import SwiftUI
 
 struct SearchProductPage: View {
 
+    let columns = [
+        GridItem(.adaptive(minimum: 100))
+    ]
 
     @State var searchText: String = ""
+    @StateObject var vm: SearchViewModel = SearchViewModel()
+    
     //@FocusState private var searchFieldFocused = true
 
     init() {
-        // UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.red]
-        // UINavigationBar.appearance().titleTextAttributes = [ .backgroundColor: UIColor.purple]
+
     }
     
     var body: some View {
@@ -52,7 +56,13 @@ struct SearchProductPage: View {
                         .padding(.vertical)
                         .padding(.leading, 7)
                     
-                    
+                    Button {
+                        vm.loadProducts(query: searchText)
+                    } label: {
+                        Text("Ara")
+                            .padding()
+                                                
+                    }
                 }
                 .frame(maxWidth: .infinity)
                 
@@ -63,16 +73,16 @@ struct SearchProductPage: View {
                 .background(Color.white)
                 .cornerRadius(2.0)
                 .shadow(radius: 3)
-                
-                NavigationLink("asdasdas") {
-                    AppAlert()
-                }
+               
+                ProductsGrid(products: $vm.products)
+                    .padding(.top, 10)
                 Spacer()
-            }
+                
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarHidden(true)
         }
     }
+}
 }
 
 struct SearchProductPage_Previews: PreviewProvider {

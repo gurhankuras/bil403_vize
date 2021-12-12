@@ -35,7 +35,7 @@ class Cart_Tests: XCTestCase {
     }
     
     func test_Cart_isEmpty_shouldReturnFalseIfCartHasItem() {
-        let product = Product(id: "1", name: "Elma", cost: 4.4, additionalInfo: "", category: ProductCategories.meyveSebze.rawValue)
+        let product = Product(id: 1, name: "Elma", image: "", cost: 4.4, additionalInfo: "", category: ProductCategories.meyveSebze.rawValue)
         let cartItem = CartItem(product: product, count: 1)
         
         let cart = Cart(data: [product.id: cartItem])
@@ -67,7 +67,7 @@ class Cart_Tests: XCTestCase {
         }
             
         let expectedTotalAmount = Double.random(in: 1..<10)
-        let product = Product(id: anyString, name: anyString, cost: expectedTotalAmount, additionalInfo: anyString, category: ProductCategories.meyveSebze.rawValue)
+        let product = Product(id: anyInt, name: anyString, image: "", cost: expectedTotalAmount, additionalInfo: anyString, category: ProductCategories.meyveSebze.rawValue)
         
         // Act
         cart.add(product: product)
@@ -82,8 +82,8 @@ class Cart_Tests: XCTestCase {
             return
         }
             
-        let product1 = Product(id: "1", name: "Elma", cost: 2.5, additionalInfo: "", category: ProductCategories.meyveSebze.rawValue)
-        let product2 = Product(id: "1", name: "Elma", cost: 2.5, additionalInfo: "", category: ProductCategories.meyveSebze.rawValue)
+        let product1 = Product(id: 1, name: "Elma", image: "", cost: 2.5, additionalInfo: "", category: ProductCategories.meyveSebze.rawValue)
+        let product2 = Product(id: 1, name: "Elma", image: "", cost: 2.5, additionalInfo: "", category: ProductCategories.meyveSebze.rawValue)
         
         // Act
         cart.add(product: product1)
@@ -102,8 +102,8 @@ class Cart_Tests: XCTestCase {
         let price1 = 2.5
         let price2 = 5.5
         
-        let product1 = Product(id: "1", name: "Elma", cost: price1, additionalInfo: "", category: ProductCategories.meyveSebze.rawValue)
-        let product2 = Product(id: "2", name: "Armut", cost: price2, additionalInfo: "", category: ProductCategories.meyveSebze.rawValue)
+        let product1 = Product(id: 1, name: "Elma", image: "", cost: price1, additionalInfo: "", category: ProductCategories.meyveSebze.rawValue)
+        let product2 = Product(id: 2, name: "Armut", image: "", cost: price2, additionalInfo: "", category: ProductCategories.meyveSebze.rawValue)
         
         // Act
         cart.add(product: product1)
@@ -122,9 +122,9 @@ class Cart_Tests: XCTestCase {
         let price2 = 5.5
         let price3 = price1
         
-        let product1 = Product(id: "1", name: "Elma", cost: price1, additionalInfo: "", category: ProductCategories.meyveSebze.rawValue)
-        let product2 = Product(id: "2", name: "Armut", cost: price2, additionalInfo: "", category: ProductCategories.meyveSebze.rawValue)
-        let product3 = Product(id: "1", name: "Elma", cost: price3, additionalInfo: "", category: ProductCategories.meyveSebze.rawValue)
+        let product1 = Product(id: 1, name: "Elma", image: "",cost: price1, additionalInfo: "", category: ProductCategories.meyveSebze.rawValue)
+        let product2 = Product(id: 2, name: "Armut", image: "",cost: price2, additionalInfo: "", category: ProductCategories.meyveSebze.rawValue)
+        let product3 = Product(id: 1, name: "Elma", image: "", cost: price3, additionalInfo: "", category: ProductCategories.meyveSebze.rawValue)
         
         // Act
         cart.add(product: product1)
@@ -144,9 +144,9 @@ class Cart_Tests: XCTestCase {
         let price2 = 5.5
         let price3 = price1
         
-        let product1 = Product(id: "1", name: "Elma", cost: price1, additionalInfo: "", category: ProductCategories.meyveSebze.rawValue)
-        let product2 = Product(id: "2", name: "Armut", cost: price2, additionalInfo: "", category: ProductCategories.meyveSebze.rawValue)
-        let product3 = Product(id: "1", name: "Elma", cost: price3, additionalInfo: "", category: ProductCategories.meyveSebze.rawValue)
+        let product1 = Product(id: 1, name: "Elma", image: "", cost: price1, additionalInfo: "", category: ProductCategories.meyveSebze.rawValue)
+        let product2 = Product(id: 2, name: "Armut", image: "", cost: price2, additionalInfo: "", category: ProductCategories.meyveSebze.rawValue)
+        let product3 = Product(id: 1, name: "Elma", image: "", cost: price3, additionalInfo: "", category: ProductCategories.meyveSebze.rawValue)
         
         // Act
         cart.add(product: product1)
@@ -172,7 +172,7 @@ extension Cart_Tests {
         }
         
         let price = 4.7
-        let product1 = Product(id: "1", name: "Elma", cost: price, additionalInfo: "", category: ProductCategories.meyveSebze.rawValue)
+        let product1 = Product(id: 1, name: "Elma", image: "", cost: price, additionalInfo: "", category: ProductCategories.meyveSebze.rawValue)
 
         
         // Act
@@ -189,8 +189,8 @@ extension Cart_Tests {
         }
         
         let price = 4.7
-        let product1 = Product(id: "1", name: "Elma", cost: price, additionalInfo: "", category: ProductCategories.meyveSebze.rawValue)
-        let product2 = Product(id: "1", name: "Elma", cost: price, additionalInfo: "", category: ProductCategories.meyveSebze.rawValue)
+        let product1 = Product(id: 1, name: "Elma", image: "", cost: price, additionalInfo: "", category: ProductCategories.meyveSebze.rawValue)
+        let product2 = Product(id: 1, name: "Elma", image: "",cost: price, additionalInfo: "", category: ProductCategories.meyveSebze.rawValue)
 
         
         // Act
@@ -292,7 +292,7 @@ extension Cart_Tests {
 extension Cart_Tests {
     /// use this when product properties doesn't matter
     private var anyProduct: Product {
-        return Product(id: anyString, name: anyString, cost: anyDouble, additionalInfo: anyString, category: ProductCategories.meyveSebze.rawValue)
+        return Product(id: anyInt, name: anyString, image: "",cost: anyDouble, additionalInfo: anyString, category: ProductCategories.meyveSebze.rawValue)
     }
     
     private var anyString: String {
@@ -318,7 +318,7 @@ extension Cart_Tests {
         }
         
         cart.add(product: anyProduct)
-        cart.add(product: Product(id: "54", name: "Makarna", cost: 34.5, additionalInfo: "", category: ProductCategories.temelGida.rawValue))
+        cart.add(product: Product(id: 54, name: "Makarna", image: "",cost: 34.5, additionalInfo: "", category: ProductCategories.temelGida.rawValue))
         
         cart.clear()
         
@@ -332,7 +332,7 @@ extension Cart_Tests {
         }
         
         cart.add(product: anyProduct)
-        cart.add(product: Product(id: "54", name: "Makarna", cost: 34.5, additionalInfo: "", category: ProductCategories.temelGida.rawValue))
+        cart.add(product: Product(id: 54, name: "Makarna", image: "",cost: 34.5, additionalInfo: "", category: ProductCategories.temelGida.rawValue))
         
         cart.clear()
         

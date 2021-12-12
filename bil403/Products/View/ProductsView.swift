@@ -8,36 +8,36 @@
 import SwiftUI
 
 struct ProductsView: View {
-    let index: Int
-    @State var currentIndex: Int
+    let category: Category
+    let categories: [Category]
+    @State var currentId: String
     @EnvironmentObject var navigationHelper: NavigationHelper
     let productService: ProductServiceProtocol = MockProductService()
     
     // @State private var isShowingSelectPage = false
     
-    init(indexP: Int) {
-        self.index = indexP
-        _currentIndex = State(initialValue: self.index)
+    init(category: Category, categories: [Category]) {
+        self.category = category
+        self.categories = categories
+        _currentId = State(initialValue: category.id)
         // self.currentIndex = indexP
         let navBarAppearance = UINavigationBarAppearance()
         navBarAppearance.backButtonAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.white]
         // print(" INIT \(self.isShowingSelectPage)")
     }
     
-   let categories = [
-        ProductCategory(name: "Meyve & Sebze", id: ProductCategories.meyveSebze.rawValue),
-        ProductCategory(name: "Kişisel Bakım", id: ProductCategories.kisiselBakim.rawValue),
-        ProductCategory(name: "Atıştırmalık", id: ProductCategories.atistirmalik.rawValue),
-        ProductCategory(name: "Temel Gıda", id: ProductCategories.temelGida.rawValue)
-   ]
+  
     
     var body: some View {
         VStack {
-            CategoriesSelection(categories: categories, selectedIndex: $currentIndex)
-            TabView(selection: $currentIndex.animation()) {
-                ForEach(0..<categories.count, id: \.self) { index in
-                    CategoryProductsView(category: categories[index], productService: productService)
-                        .tag(index)
+            
+            CategoriesSelection(categories: categories, selectedId: $currentId)
+            TabView(selection: $currentId.animation()) {
+                ForEach(categories) { category in
+                    LazyView {
+                        CategoryProductsView(category: category, productService: productService)
+                    }
+                        .tag(category.id)
                 }
             }
             .tabViewStyle(PageTabViewStyle())
@@ -81,26 +81,29 @@ struct ProductsView: View {
 }
 
 struct CategoryTab: View {
+    /*
     let name: String
     let index: Int
-    @Binding var selected: Int
+     */
+    let category: Category
+    @Binding var selected: String
     
     var body: some View {
         Button {
             withAnimation {
-                self.selected = index
+                self.selected = category.id
             }
             print("Selected")
         } label: {
             VStack(spacing: 0) {
-                Text(name)
+                Text(category.title)
                     .font(.subheadline)
                     .foregroundColor(.white)
                     .padding(.bottom, 6)
                 
                     Rectangle()
                         .frame(width: .infinity, height: 3)
-                        .foregroundColor(selected == index ? .yellow : appPurple)
+                        .foregroundColor(selected == category.id ? .yellow : appPurple)
                 
                     
             }
@@ -115,20 +118,20 @@ struct CategoryTab: View {
 
 struct ProductsView_Previews: PreviewProvider {
     static var previews: some View {
-        ProductsView(indexP: 1)
+        ProductsView(category: Category(id: "", title: "Meyve & Sebze", image: ""), categories: [])
     }
 }
 
 struct CategoriesSelection: View {
-    let categories: [ProductCategory]
+    let categories: [Category]
     
-    var selectedIndex: Binding<Int>
+    var selectedId: Binding<String>
     
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack {
-                ForEach(0..<categories.count, id: \.self) { index in
-                    CategoryTab(name: categories[index].name, index: index, selected: selectedIndex)
+                ForEach(categories) { cat in
+                    CategoryTab(category: cat, selected: selectedId)
                 }
             }
         }

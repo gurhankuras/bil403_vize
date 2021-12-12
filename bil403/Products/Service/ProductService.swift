@@ -74,16 +74,16 @@ class ProductService: ProductServiceProtocol {
 class MockProductService: ProductServiceProtocol {
     private let defaultProducts
     = [
-        Product(id: "1", name: "Elma", cost: 4.5, additionalInfo: "1 kg", category: "meyve&sebze"),
-        Product(id: "45", name: "Domates", cost: 7.55, additionalInfo: "1 kg", category: "meyve&sebze"),
-        Product(id: "56", name: "Biber", cost: 9.50, additionalInfo: "1 kg", category: "meyve&sebze"),
-        Product(id: "13", name: "Armut", cost: 10.45, additionalInfo: "1 kg", category: "meyve&sebze"),
-        Product(id: "75", name: "Havuç", cost: 8.5, additionalInfo: "1 kg", category: "meyve&sebze"),
+        Product(id: 1, name: "Elma",  image: "",cost: 4.5, additionalInfo: "1 kg", category: "meyve&sebze"),
+        Product(id: 45, name: "Domates",  image: "",cost: 7.55, additionalInfo: "1 kg", category: "meyve&sebze"),
+        Product(id: 56, name: "Biber",  image: "",cost: 9.50, additionalInfo: "1 kg", category: "meyve&sebze"),
+        Product(id: 13, name: "Armut",  image: "",cost: 10.45, additionalInfo: "1 kg", category: "meyve&sebze"),
+        Product(id: 75, name: "Havuç", image: "", cost: 8.5, additionalInfo: "1 kg", category: "meyve&sebze"),
         
-        Product(id: "97", name: "Colgate Diş Fırçası", cost: 20.5, additionalInfo: "", category: "kisiselbakim"),
-        Product(id: "9", name: "Duru Şampuan", cost: 28.5, additionalInfo: "", category: "kisiselbakim"),
-        Product(id: "7", name: "Sendodyne Diş Macunu", cost: 25.5, additionalInfo: "", category: "kisiselbakim"),
-        Product(id: "97", name: "Deodorant", cost: 4.5, additionalInfo: "", category: "kisiselbakim"),
+        Product(id: 97, name: "Colgate Diş Fırçası", image: "", cost: 20.5, additionalInfo: "", category: "kisiselbakim"),
+        Product(id: 9, name: "Duru Şampuan",  image: "",cost: 28.5, additionalInfo: "", category: "kisiselbakim"),
+        Product(id: 7, name: "Sendodyne Diş Macunu",  image: "",cost: 25.5, additionalInfo: "", category: "kisiselbakim"),
+        Product(id: 97, name: "Deodorant",  image: "",cost: 4.5, additionalInfo: "", category: "kisiselbakim"),
       ]
     
     private let products: [Product]
@@ -96,6 +96,7 @@ class MockProductService: ProductServiceProtocol {
     
     func getProductsBy(category: String) -> AnyPublisher<[Product], Error> {
         if fails {
+            print("FAIL OLDU")
             return Just([])
                 .tryMap({ publishedProducts in
                     throw URLError(.badServerResponse)
@@ -112,7 +113,7 @@ class MockProductService: ProductServiceProtocol {
 }
 
 enum ProductCategories: String {
-    case meyveSebze = "meyve&sebze"
+    case meyveSebze = "meyvesebze"
     case kisiselBakim = "kisiselbakim"
     case atistirmalik = "atistirmalik"
     case temelGida = "temelgida"

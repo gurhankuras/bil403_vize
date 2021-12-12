@@ -27,28 +27,45 @@ struct CartItem: Identifiable {
         }
         get { return _count }
     }
-    
-    /*
-    class Point {
-      private var _x: Int = 0             // _x -> backingX
-      var x: Int {
-        set { _x = 2 * newValue }
-        get { return _x / 2 }
-      }
-    }
-     */
 }
+
+
+struct ProductBundle: Decodable {
+    let productId: Int
+    let count: Int
+    
+    func toDict() -> [String: Any] {
+        return ["productId": productId,
+                "count": count ]
+    }
+}
+
+struct Order {
+    let userId: Int
+    let addressId: Int
+    let paymentMethodId: Int
+    let purchasedItems: [ProductBundle]
+    
+    func toDict() -> [String: Any] {
+        return ["addressId": addressId,
+                "paymentMethodId": paymentMethodId,
+                "purchasedItems": purchasedItems.map({ $0.toDict() }),
+                "userId": userId
+                ]
+    }
+}
+
 
 class Cart: ObservableObject {
     enum CartError: Error {
         case keyNotFound
     }
     
-    @Published var items = [String: CartItem]()
+    @Published var items = [Int: CartItem]()
     @Published var loading = false
     @Published var totalAmount = 0.0
     
-    init(data: [String: CartItem] = [:]) {
+    init(data: [Int: CartItem] = [:]) {
         self.items = data
     }
     
@@ -109,5 +126,14 @@ class Cart: ObservableObject {
         return totalAmount
     }
     
-    
+    // TEST
+    func toOrder(addressId: Int, paymentMethod: Int) -> Order {
+        let items = toList()
+        let bundles: [ProductBundle] = items.map { cartItem in
+            let bundle = ProductBundle(productId: cartItem.product.id, count: cartItem.count)
+            return bundle
+        }
+        
+        return Order(userId: 1, addressId: 1, paymentMethodId: paymentMethod, purchasedItems: bundles)
+    }
 }

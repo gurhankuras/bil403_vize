@@ -11,39 +11,34 @@ struct ConfirmationReviewPage: View {
     @Environment(\.presentationMode) var presentationMode
 //    @Environment(\.rootPresentationMode) var rootPresentationMode;
     @EnvironmentObject var navigationHelper: NavigationHelper
-    @State var isLoading = false
+    @EnvironmentObject var cart: Cart
+    @StateObject var vm: OrderConfirmationViewModel = OrderConfirmationViewModel()
     
-    let address =
-        Address(id: "2ff",
-                address: "Hürriyet, Kaya sk. No: 12, 34876 Kartal/İstanbul/İstanbul")
-     let paymentMethod =
-            PaymentMethod(id: "4ggh", name: "BKM Express", firstSixDigits: "425245", lastThreeDigits: "324")
+    let address: Address
+    let paymentMethod: PaymentMethod
+    
     
     var body: some View {
         ZStack {
             VStack {
                 ScrollView {
-                    /*
-                    CartProductView(cartItem: )
-                    CartProductView()
-                    CartProductView()
-                    CartProductView()
-                    CartProductView()
-                    CartProductView()
-                     */
+                    ForEach(cart.toList()) { cartItem in
+                        CartProductView(cartItem: cartItem, immutable: true)
+                    }
                 }
                 AddressTile2(address: address)
                 PaymentMethodTile2(method: paymentMethod)
                 //Spacer()
                 Button {
-                    isLoading.toggle()
-                    
+                    vm.order(order: cart.toOrder(addressId: address.id, paymentMethod: paymentMethod.id))
+                    /*
                     DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
                         isLoading.toggle()
                         // navigationHelper.close()
                         presentationMode.wrappedValue.dismiss()
                         presentationMode.wrappedValue.dismiss()
                     }
+                     */
                     
                     // rootPresentationMode.wrappedValue.close()
                 } label: {
@@ -54,16 +49,36 @@ struct ConfirmationReviewPage: View {
             }
             .navigationTitle("Doğrulama")
             
-            if isLoading {
+            if vm.loading {
                 AppAlert()
             }
+        }
+        .alert(vm.operationResultMessage ?? "", isPresented: $vm.showMessage) {
+            Button {
+                presentationMode.wrappedValue.dismiss()
+                presentationMode.wrappedValue.dismiss()
+            } label: {
+                Text("Tamam")
+            }
+
+                
+        }
+        .onAppear {
+            vm.setCart(cart: cart)
         }
     }
 }
 
 struct ConfirmationReviewPage_Previews: PreviewProvider {
+    
+    static let address =
+        Address(id: 5,
+                address: "Hürriyet, Kaya sk. No: 12, 34876 Kartal/İstanbul/İstanbul")
+     static let paymentMethod =
+            PaymentMethod(id: 1, name: "BKM Express", lastThreeDigits: "324")
+    
     static var previews: some View {
-        ConfirmationReviewPage()
+        ConfirmationReviewPage(address: address, paymentMethod: paymentMethod)
     }
 }
 
