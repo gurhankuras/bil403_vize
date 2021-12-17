@@ -1,0 +1,1 @@
+UI'in tasarımı direkt Getir'in mobil uygulamasını taklit edecek şekilde yapılmıştır, kullanılan ürün fotoğrafları yine Getir'in CDN'inden linkler içermektedir. Hiçbir tür hakka sahip olmamakla birlikte herhangi bir kar ya da marka adı kullanma niyeti bulunmamaktadır. Eğitim amaçlı kullanılmıştır. 
