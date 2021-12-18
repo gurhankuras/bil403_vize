@@ -9,29 +9,15 @@ import SwiftUI
 
 struct CategoryProductsView: View {
     let category: Category
-    let productService: ProductServiceProtocol
     @StateObject var productsViewModel: ProductsViewModel
     
     
     init(category: Category, productService: ProductServiceProtocol) {
         self.category = category
-        self.productService = productService
          _productsViewModel = StateObject(wrappedValue:
-                                          ProductsViewModel(categoryId: category.id ,productService: productService))
+                                            ProductsViewModel(category: category.id ,productService: Dependencies.instance.productService))
     }
     var body: some View {
-        /*
-        GeometryReader { geometry in
-                    ScrollView(.vertical) {
-                        Rectangle()
-                            .frame(width: geometry.size.width, height: 0.01)
-                        ForEach($productsViewModel.products) { o in
-                            Text("\(o.id)")
-                        }
-                    }
-                }
-         */
-        
             ScrollView {
                 if (productsViewModel.loading) {
                     ProgressView()
@@ -41,14 +27,11 @@ struct CategoryProductsView: View {
                         .padding(.top, 10)
                 }
             }
-         
-        
-        
     }
 }
 
 struct CategoryProductsView_Previews: PreviewProvider {
-    static let category = Category(id: ProductCategories.kisiselBakim.rawValue, title: "Meyve & Sebze",image: "" )
+    static let category = Category(id: ProdCategory.kisiselBakim, title: "Meyve & Sebze",image: "" )
     
     static let productService = MockProductService()
     

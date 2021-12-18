@@ -13,12 +13,16 @@ protocol ProductServiceProtocol {
 }
 
 
-class ProductService: ProductServiceProtocol {
-    //var cancellables = Set<AnyCancellable>()
+final class ProductService: ProductServiceProtocol {
+    
+    init() {
+        print("ProductService Initiliazed")
+    }
     
     func getProductsBy(category: String) -> AnyPublisher<[Product], Error> {
         guard let request = makeRequest(for: "sadasdasd") else {
-            return Just([Product]())
+            return
+            Just([Product]())
                 .setFailureType(to: Error.self)
                 .eraseToAnyPublisher()
         }
@@ -28,34 +32,7 @@ class ProductService: ProductServiceProtocol {
                     .decode(type: [Product].self, decoder: JSONDecoder())
                     .receive(on: DispatchQueue.main)
                     .eraseToAnyPublisher()
-        
-        // .tryMap(handleOutput(output:))
-                   /*.sink { (completion) in
-                       switch completion {
-                       case .finished:
-                           print("finished")
-                       case .failure(let error):
-                           print("HATA OLDU")
-                       }
-                       print("COMPLETION: \(completion)")
-           
-                   } receiveValue: {[weak self] product in
-                       print(product)
-                   }
-                    */
-                   // .store(in: &cancellables)
     }
-       /*
-       private func handleOutput(output: URLSession.DataTaskPublisher.Output) throws -> Data {
-           let (data, response) = output;
-           guard let response = response as? HTTPURLResponse,
-                 response.isGoodStatusCode else {
-                     throw URLError(.badServerResponse)
-                 }
-           return data
-       }
-        */
-       
        
     func makeRequest(for urlString: String) -> URLRequest? {
            guard let url = URL(string: urlString) else {
@@ -71,7 +48,7 @@ class ProductService: ProductServiceProtocol {
 }
 
 
-class MockProductService: ProductServiceProtocol {
+final class MockProductService: ProductServiceProtocol {
     private let defaultProducts
     = [
         Product(id: 1, name: "Elma",  image: "",cost: 4.5, additionalInfo: "1 kg", category: "meyve&sebze"),
@@ -112,14 +89,3 @@ class MockProductService: ProductServiceProtocol {
     
 }
 
-enum ProductCategories: String {
-    case meyveSebze = "meyvesebze"
-    case kisiselBakim = "kisiselbakim"
-    case atistirmalik = "atistirmalik"
-    case temelGida = "temelgida"
-    /*
-    func includes(product: Product) -> Bool {
-        return product.
-    }
-     */
-}

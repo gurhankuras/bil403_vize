@@ -8,4 +8,4 @@
 import Foundation
 
 
-let mockProduct = Product(id: 1, name: "Elma", image: "", cost: 7.45, additionalInfo: "1 kg", category: ProductCategories.meyveSebze.rawValue)
+let mockProduct = Product(id: 1, name: "Elma", image: "", cost: 7.45, additionalInfo: "1 kg", category: ProdCategory.meyveSebze.rawValue)

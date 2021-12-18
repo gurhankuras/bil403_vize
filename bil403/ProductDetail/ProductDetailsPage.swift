@@ -36,12 +36,10 @@ struct ProductDetailsPage: View {
             }
             .onAppear {
                 guard let id = product?.id else {
-                    //_countInCart = State(initialValue: 0)
                     countInCart = 0
                     return
                 }
                 countInCart = self.cart.items[id]?.count ?? 0
-                // _countInCart = State(initialValue: self.cart.items[id]?.count ?? 0)
             }
         }
         
@@ -49,13 +47,6 @@ struct ProductDetailsPage: View {
 
 }
 
-/*
-struct ProductDetailsPage_Previews: PreviewProvider {
-    static var previews: some View {
-        ProductDetailsPage(product: mockProduct)
-    }
-}
- */
 
 struct ProductDetailsToolbar: View {
     @Environment(\.presentationMode) var presentationMode;
@@ -91,14 +82,6 @@ struct ProductDetails: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            /*
-            Image("apple")
-                .resizable()
-                .frame(width: UIScreen.main.bounds.width * 0.4,
-                       height: UIScreen.main.bounds.width * 0.4)
-                .scaledToFit()
-             */
-            
             ProductThumbnail(url: product.image)
                 .frame(width: UIScreen.main.bounds.width * 0.35,
                        height: UIScreen.main.bounds.width * 0.35)

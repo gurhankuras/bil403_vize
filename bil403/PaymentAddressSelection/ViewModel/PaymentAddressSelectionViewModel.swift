@@ -7,7 +7,7 @@
 
 import Foundation
 
-class PaymentAddressSelectionViewModel: ObservableObject {
+final class PaymentAddressSelectionViewModel: ObservableObject {
     let addresses = [
         Address(id: 2,
                 address: "Hürriyet, Kaya sk. No: 12, 34876 Kartal/İstanbul/İstanbul"),

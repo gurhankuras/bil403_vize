@@ -10,7 +10,7 @@ import SwiftUI
 struct ProductsView: View {
     let category: Category
     let categories: [Category]
-    @State var currentId: String
+    @State var currentId: ProdCategory
     @EnvironmentObject var navigationHelper: NavigationHelper
     let productService: ProductServiceProtocol = MockProductService()
     
@@ -41,13 +41,6 @@ struct ProductsView: View {
                 }
             }
             .tabViewStyle(PageTabViewStyle())
-            // .environmentObject(productService)
-            
-            //.environmentObject(<#T##object: ObservableObject##ObservableObject#>)
-            /*
-            NavigationLink(destination: PaymentAddressSelectionPage(), isActive: $isShowingSelectPage) { EmptyView() }
-            .isDetailLink(false)
-             */
             
             NavigationLink(tag: NavigationRoutes.addressPaymentSelection.rawValue, selection: $navigationHelper.route) {
                 PaymentAddressSelectionPage()
@@ -61,7 +54,6 @@ struct ProductsView: View {
         .onDisappear(perform: {
             print("NOLUYOR LAAAN")
         })
-        //.navigationBarBackButtonHidden(true)
         .toolbar { // <2>
             ToolbarItem(placement: .principal) { // <3>
                 Text("Ürünler")
@@ -70,23 +62,16 @@ struct ProductsView: View {
             }
            
             ToolbarItem(placement: .navigationBarTrailing) {
-                CartIcon(
-                    /*navigateToSelection: $isShowingSelectPage
-                     */)
+                CartIcon()
             }
         }
-        //.environment(\.rootPresentationMode, self.$isShowingSelectPage)
-    }
+        }
 
 }
 
 struct CategoryTab: View {
-    /*
-    let name: String
-    let index: Int
-     */
     let category: Category
-    @Binding var selected: String
+    @Binding var selected: ProdCategory
     
     var body: some View {
         Button {
@@ -118,14 +103,14 @@ struct CategoryTab: View {
 
 struct ProductsView_Previews: PreviewProvider {
     static var previews: some View {
-        ProductsView(category: Category(id: "", title: "Meyve & Sebze", image: ""), categories: [])
+        ProductsView(category: Category(id: ProdCategory.atistirmalik, title: "Meyve & Sebze", image: ""), categories: [])
     }
 }
 
 struct CategoriesSelection: View {
     let categories: [Category]
     
-    var selectedId: Binding<String>
+    var selectedId: Binding<ProdCategory>
     
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {

@@ -14,8 +14,8 @@
             filePath = "bil403Tests/Cart_Tests.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "137"
-            endingLineNumber = "137"
+            startingLineNumber = "144"
+            endingLineNumber = "144"
             landmarkName = "test_Cart_add_shouldReturnTotalAmountWhenAddedTwoDifferentOneSameItem()"
             landmarkType = "7">
          </BreakpointContent>
@@ -30,9 +30,9 @@
             filePath = "bil403Tests/Cart_Tests.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "115"
-            endingLineNumber = "115"
-            landmarkName = "test_Cart_add_shouldBeStackedCorrectly()"
+            startingLineNumber = "117"
+            endingLineNumber = "117"
+            landmarkName = "test_Cart_add_shouldReturnTotalAmountWhenAddedTwoDifferentItem()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

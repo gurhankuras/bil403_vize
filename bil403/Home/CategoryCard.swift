@@ -33,17 +33,5 @@ struct CategoryCard: View {
             }.foregroundColor(appPurple)
         }
         .tint(appPurple)
-
-        
-       // .background(.blue)
-        
     }
 }
-/*
-struct CategoryCard_Previews: PreviewProvider {
-    static var previews: some View {
-        CategoryCard(category: Category(title: "Meyve & Sebze", image: "https://cdn.getir.com/cat/5928113e616cab00041ec6de_1619242870968_1619242871055.jpeg"))
-    }
-}
-
-*/

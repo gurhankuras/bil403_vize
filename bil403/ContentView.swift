@@ -10,12 +10,8 @@ import SwiftUI
 struct ContentView: View {
     @StateObject var cart = Cart()
     
-    init() {
-        print("ContentView")
-        // UITabBar.appearance().backgroundColor = UIColor.white
-    }
     var body: some View {
-        //NavigationView {
+       
             TabView {
                 HomeView()
                     .tabItem {
@@ -35,10 +31,8 @@ struct ContentView: View {
             
             }
             .shadow(radius: 2)
-            
-        //}
-        .accentColor(appPurple)
-        .environmentObject(cart)
+            .accentColor(appPurple)
+            .environmentObject(cart)
     }
 }
 

@@ -8,21 +8,13 @@
 import SwiftUI
 
 struct LazyView<T: View>: View {
+    var view: () -> T
+
     init(view: @escaping () -> T) {
         self.view = view
-        // print("LazyView initiliazed!")
     }
     
-    var view: () -> T
     var body: some View {
         self.view()
     }
 }
-
-/*
-struct LazyView_Previews: PreviewProvider {
-    static var previews: some View {
-        LazyView()
-    }
-}
-*/

@@ -6,57 +6,8 @@
 //
 
 import Foundation
-import CloudKit
 
-
-struct CartItem: Identifiable {
-    let id: UUID = UUID()
-    let product: Product
-    
-    init(product: Product, count: Int) {
-        self.product = product
-        self._count = count
-    }
-    
-    private var _count: Int
-    var count: Int {
-        set {
-            if newValue >= 0 {
-                _count = newValue
-            }
-        }
-        get { return _count }
-    }
-}
-
-
-struct ProductBundle: Decodable {
-    let productId: Int
-    let count: Int
-    
-    func toDict() -> [String: Any] {
-        return ["productId": productId,
-                "count": count ]
-    }
-}
-
-struct Order {
-    let userId: Int
-    let addressId: Int
-    let paymentMethodId: Int
-    let purchasedItems: [ProductBundle]
-    
-    func toDict() -> [String: Any] {
-        return ["addressId": addressId,
-                "paymentMethodId": paymentMethodId,
-                "purchasedItems": purchasedItems.map({ $0.toDict() }),
-                "userId": userId
-                ]
-    }
-}
-
-
-class Cart: ObservableObject {
+final class Cart: ObservableObject {
     enum CartError: Error {
         case keyNotFound
     }

@@ -47,9 +47,6 @@ struct PaymentMethodList: View {
     var body: some View {
             VStack(alignment: .leading) {
                 ForEach(methods) { method in
-                    /*
-                    AddressTile(selectedId: $selectedId, address: address)
-                     */
                     PaymentMethodTile(selected: $selected, method: method)
                     Divider()
                 }

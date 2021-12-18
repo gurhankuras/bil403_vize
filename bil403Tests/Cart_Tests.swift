@@ -35,7 +35,7 @@ class Cart_Tests: XCTestCase {
     }
     
     func test_Cart_isEmpty_shouldReturnFalseIfCartHasItem() {
-        let product = Product(id: 1, name: "Elma", image: "", cost: 4.4, additionalInfo: "", category: ProductCategories.meyveSebze.rawValue)
+        let product = Product.stub(withID: 1)
         let cartItem = CartItem(product: product, count: 1)
         
         let cart = Cart(data: [product.id: cartItem])
@@ -51,7 +51,7 @@ class Cart_Tests: XCTestCase {
             return
         }
         
-        let product = anyProduct
+        let product = Product.stub(withID: 1)
         
         // Act
         cart.add(product: product)
@@ -67,8 +67,9 @@ class Cart_Tests: XCTestCase {
         }
             
         let expectedTotalAmount = Double.random(in: 1..<10)
-        let product = Product(id: anyInt, name: anyString, image: "", cost: expectedTotalAmount, additionalInfo: anyString, category: ProductCategories.meyveSebze.rawValue)
-        
+        let product = Product.stub(withID: 2)
+            .setting(\.cost, to: expectedTotalAmount)
+              
         // Act
         cart.add(product: product)
         
@@ -82,9 +83,9 @@ class Cart_Tests: XCTestCase {
             return
         }
             
-        let product1 = Product(id: 1, name: "Elma", image: "", cost: 2.5, additionalInfo: "", category: ProductCategories.meyveSebze.rawValue)
-        let product2 = Product(id: 1, name: "Elma", image: "", cost: 2.5, additionalInfo: "", category: ProductCategories.meyveSebze.rawValue)
-        
+        let product1 = Product.stub(withID: 1)
+        let product2 = Product.stub(withID: 1)
+
         // Act
         cart.add(product: product1)
         cart.add(product: product2)
@@ -99,64 +100,73 @@ class Cart_Tests: XCTestCase {
             return
         }
             
-        let price1 = 2.5
-        let price2 = 5.5
+        let firstProductPrice = 2.5
+        let secondPricePrice = 5.5
         
-        let product1 = Product(id: 1, name: "Elma", image: "", cost: price1, additionalInfo: "", category: ProductCategories.meyveSebze.rawValue)
-        let product2 = Product(id: 2, name: "Armut", image: "", cost: price2, additionalInfo: "", category: ProductCategories.meyveSebze.rawValue)
-        
+        let firstAddedProduct = Product.stub(withID: 1)
+                                .setting(\.cost, to: firstProductPrice)
+        let secondAddedProduct = Product.stub(withID: 2)
+                                .setting(\.cost, to: secondPricePrice)
         // Act
-        cart.add(product: product1)
-        cart.add(product: product2)
+        cart.add(product: firstAddedProduct)
+        cart.add(product: secondAddedProduct)
         
         let expectedTotalAmount = cart.calculateTotalAmount()
-        XCTAssertEqual(expectedTotalAmount, price1 + price2)
+        XCTAssertEqual(expectedTotalAmount, firstProductPrice + secondPricePrice)
     }
     func test_Cart_add_shouldBeStackedCorrectly() {
+        
+        // Prepare
         guard let cart = cart else {
             XCTFail("Some problem occured related to initialization of Cart")
             return
         }
-            
-        let price1 = 2.5
-        let price2 = 5.5
-        let price3 = price1
         
-        let product1 = Product(id: 1, name: "Elma", image: "",cost: price1, additionalInfo: "", category: ProductCategories.meyveSebze.rawValue)
-        let product2 = Product(id: 2, name: "Armut", image: "",cost: price2, additionalInfo: "", category: ProductCategories.meyveSebze.rawValue)
-        let product3 = Product(id: 1, name: "Elma", image: "", cost: price3, additionalInfo: "", category: ProductCategories.meyveSebze.rawValue)
+        let firstProductPrice = 2.5
+        let secondProductPrice = 5.5
+        let thirdProductPrice = firstProductPrice
         
+        let firstAddedProduct = Product.stub(withID: 1)
+                                .setting(\.cost, to: firstProductPrice)
+        let secondAddedProduct = Product.stub(withID: 2)
+                                .setting(\.cost, to: secondProductPrice)
+        let thirdAddedProduct = Product.stub(withID: 1)
+                                .setting(\.cost, to: thirdProductPrice)
         // Act
-        cart.add(product: product1)
-        cart.add(product: product2)
-        cart.add(product: product3)
+        cart.add(product: firstAddedProduct)
+        cart.add(product: secondAddedProduct)
+        cart.add(product: thirdAddedProduct)
         
+        // Assert
         XCTAssertEqual(cart.items.count, 2)
     }
     
     func test_Cart_add_shouldReturnTotalAmountWhenAddedTwoDifferentOneSameItem() {
+        // Prepare
         guard let cart = cart else {
             XCTFail("Some problem occured related to initialization of Cart")
             return
         }
             
-        let price1 = 2.5
-        let price2 = 5.5
-        let price3 = price1
+        let firstProductPrice = 2.5
+        let secondProductPrice = 5.5
+        let thirdProductPrice = firstProductPrice
         
-        let product1 = Product(id: 1, name: "Elma", image: "", cost: price1, additionalInfo: "", category: ProductCategories.meyveSebze.rawValue)
-        let product2 = Product(id: 2, name: "Armut", image: "", cost: price2, additionalInfo: "", category: ProductCategories.meyveSebze.rawValue)
-        let product3 = Product(id: 1, name: "Elma", image: "", cost: price3, additionalInfo: "", category: ProductCategories.meyveSebze.rawValue)
-        
+        let first = Product.stub(withID: 1)
+                            .setting(\.cost, to: firstProductPrice)
+        let second = Product.stub(withID: 2)
+                            .setting(\.cost, to: secondProductPrice)
+        let third = Product.stub(withID: 1)
+                            .setting(\.cost, to: thirdProductPrice)
         // Act
-        cart.add(product: product1)
-        cart.add(product: product2)
-        cart.add(product: product3)
+        cart.add(product: first)
+        cart.add(product: second)
+        cart.add(product: third)
         
-        
-        let expectedTotalAmount = price1 + price2 + price3
+        let expectedTotalAmount = firstProductPrice + secondProductPrice + thirdProductPrice
         let totalAmount = cart.calculateTotalAmount()
         
+        // Assert
         XCTAssertEqual(expectedTotalAmount, totalAmount)
     }
 }
@@ -166,39 +176,44 @@ extension Cart_Tests {
     
     // MARK: totalAmount
     func test_Cart_totalAmount_publishedTotalAmountShouldChangeWhenProductThatHasNotBeenAddedToCartAdded() {
+        // Prepare
         guard let cart = cart else {
             XCTFail("Some problem occured related to initialization of Cart")
             return
         }
         
         let price = 4.7
-        let product1 = Product(id: 1, name: "Elma", image: "", cost: price, additionalInfo: "", category: ProductCategories.meyveSebze.rawValue)
+        let product = Product.stub(withID: 1)
+                            .setting(\.cost, to: price)
 
-        
         // Act
-        cart.add(product: product1)
+        cart.add(product: product)
         let expectedTotalAmount = price
 
+        // Assert
         XCTAssertEqual(expectedTotalAmount, cart.totalAmount)
     }
     
     func test_Cart_totalAmount_publishedTotalAmountShouldChangeWhenSameProductAdded() {
+        // Prepare
         guard let cart = cart else {
             XCTFail("Some problem occured related to initialization of Cart")
             return
         }
         
         let price = 4.7
-        let product1 = Product(id: 1, name: "Elma", image: "", cost: price, additionalInfo: "", category: ProductCategories.meyveSebze.rawValue)
-        let product2 = Product(id: 1, name: "Elma", image: "",cost: price, additionalInfo: "", category: ProductCategories.meyveSebze.rawValue)
+        let firstProduct = Product.stub(withID: 1)
+            .setting(\.cost, to: price)
+        let secondProduct = firstProduct
 
         
         // Act
-        cart.add(product: product1)
-        cart.add(product: product2)
+        cart.add(product: firstProduct)
+        cart.add(product: secondProduct)
         
         let expectedTotalAmount = 2 * price
 
+        // Assert
         XCTAssertEqual(expectedTotalAmount, cart.totalAmount)
     }
 }
@@ -218,7 +233,7 @@ extension Cart_Tests {
         var thrownError: Cart.CartError?
         let expectedError = Cart.CartError.keyNotFound
         
-        XCTAssertThrowsError(try cart.remove(product: anyProduct), "") { error in
+        XCTAssertThrowsError(try cart.remove(product: Product.stub(withID: 1)), "") { error in
             thrownError = error as? Cart.CartError
         }
         
@@ -232,22 +247,23 @@ extension Cart_Tests {
         }
         
         // Given
-        let product = anyProduct
+        let product = Product.stub(withID: 1)
         cart.add(product: product)
-        XCTAssertTrue(!cart.isEmpty)
+        
+        XCTAssertTrue(!cart.isEmpty) // for more defensive
         
         guard let _ = try? cart.remove(product: product) else {
             XCTFail()
             return
         }
         
-        let expectedExists = false
+        let shouldExists = false
         
         let exists = cart.items.contains { (key, value) in
             key == product.id
         }
         
-        XCTAssertEqual(expectedExists, exists)
+        XCTAssertEqual(shouldExists, exists)
     }
     
     func test_Cart_remove_cartItemShouldNotBeRemovedIfThereIsAtLeastOneProduct() {
@@ -257,7 +273,7 @@ extension Cart_Tests {
         }
         
         // Given
-        let product = anyProduct
+        let product = Product.stub(withID: 1)
 
        
         cart.add(product: product)
@@ -270,18 +286,21 @@ extension Cart_Tests {
             return
         }
         
-        let expectedExists = true
+        let shouldExists = true
         
         let exists = cart.items.contains { (key, value) in
             key == product.id
         }
         
-        XCTAssertEqual(expectedExists, exists)
+        XCTAssertEqual(shouldExists, exists)
         
-        let expectedCount = 1
-        let count = cart.items[product.id]?.count
         
-        XCTAssertEqual(expectedCount, count)
+        let bundle = cart.items[product.id]
+
+        let expectedProductCountInBundle = 1
+        let countInBundle = bundle?.count
+        
+        XCTAssertEqual(expectedProductCountInBundle, countInBundle)
     }
     
 }
@@ -292,7 +311,7 @@ extension Cart_Tests {
 extension Cart_Tests {
     /// use this when product properties doesn't matter
     private var anyProduct: Product {
-        return Product(id: anyInt, name: anyString, image: "",cost: anyDouble, additionalInfo: anyString, category: ProductCategories.meyveSebze.rawValue)
+        return Product(id: anyInt, name: anyString, image: "",cost: anyDouble, additionalInfo: anyString, category: ProdCategory.meyveSebze.rawValue)
     }
     
     private var anyString: String {
@@ -317,8 +336,8 @@ extension Cart_Tests {
             return
         }
         
-        cart.add(product: anyProduct)
-        cart.add(product: Product(id: 54, name: "Makarna", image: "",cost: 34.5, additionalInfo: "", category: ProductCategories.temelGida.rawValue))
+        cart.add(product: Product.stub(withID: 1))
+        cart.add(product: Product.stub(withID: 3))
         
         cart.clear()
         
@@ -331,8 +350,8 @@ extension Cart_Tests {
             return
         }
         
-        cart.add(product: anyProduct)
-        cart.add(product: Product(id: 54, name: "Makarna", image: "",cost: 34.5, additionalInfo: "", category: ProductCategories.temelGida.rawValue))
+        cart.add(product: Product.stub(withID: 1))
+        cart.add(product: Product.stub(withID: 3))
         
         cart.clear()
         
@@ -344,6 +363,8 @@ extension Cart_Tests {
             XCTFail("Some problem occured related to initialization of Cart")
             return
         }
+        
+        XCTAssertTrue(cart.isEmpty)
         
         let beforeCount = cart.items.count
         let beforeTotalAmount = cart.totalAmount

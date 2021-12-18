@@ -8,49 +8,28 @@
 import Foundation
 import Combine
 
-class ProductsViewModel: ObservableObject {
+final class ProductsViewModel: ObservableObject {
     @Published var products = [Product]()
     @Published var loading: Bool = false
 
-    let categoryId: String
+    let category: ProdCategory
     let productService: ProductServiceProtocol
     
     var cancellables = Set<AnyCancellable>()
     
-    init(categoryId: String, productService: ProductServiceProtocol) {
-        self.categoryId = categoryId
+    init(category: ProdCategory, productService: ProductServiceProtocol) {
+        self.category = category
         self.productService = productService
         loadProducts()
     }
     
-    /*
-    func loadProducts() {
-        loading = true
-        productService.getProductsBy(category: categoryId)
-            .sink { [weak self] completion  in
-                switch completion {
-                case .finished:
-                    print("finished")
-                    
-                case .failure(let error):
-                    print(error)
-                    print("HATA OLDU")
-                }
-                print("COMPLETION: \(completion)")
-                self?.loading = false
-            } receiveValue: { [weak self] returnedPosts in
-                print(returnedPosts)
-                self?.products = returnedPosts
-            }
-            .store(in: &cancellables)
-
-    }
-     */
     
     func loadProducts() {
-        guard let request = makeGetRequest(urlStr: ApiURL.products(by: categoryId)) else {
+        guard let request = Endpoint.products(by: category).url else {
             return
         }
+        
+       // print(ApiURL.products(by: category))
         
         loading = true
         URLSession.shared.dataTaskPublisher(for: request)
@@ -83,26 +62,5 @@ class ProductsViewModel: ObservableObject {
                   throw URLError(.badServerResponse)
               }
         return data
-    }
-    
-
-    private func makeGetRequest(urlStr: String) -> URLRequest? {
-        guard let url = URL(string: urlStr) else {
-            print("Error: cannot create URL")
-            return nil
-        }
-        
-        /*
-        guard let parameters = processInputs() else {
-            return nil
-        }
-         */
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        // Create the request
-        return request
     }
 }

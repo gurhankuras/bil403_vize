@@ -45,18 +45,8 @@ struct CartIcon: View {
         .fullScreenCover(isPresented: $cartIsOpen) {
             
         } content: {
-            CartPage(
-                /*navigateToSelection: $navigateToSelection
-                 */)
+            CartPage()
         }
 
     }
 }
-
-/*
-struct CartIcon_Previews: PreviewProvider {
-    static var previews: some View {
-        CartIcon()
-    }
-}
-*/

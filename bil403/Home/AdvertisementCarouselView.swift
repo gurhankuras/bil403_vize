@@ -9,40 +9,40 @@ import Foundation
 import SwiftUI
 import Combine
 
-class AdvertisementCarouselViewModel: ObservableObject {
+final class AdvertisementCarouselViewModel: ObservableObject {
     @Published var ads: [Advertisement] = []
     @Published var selectedTab: Int = 0
     @Published var loading = false
+    @Published var error: String?
     
     var cancellables = Set<AnyCancellable>()
     
     var timer: AnyCancellable?
     
-    init() {
-        start()
+    private let networkService: NetworkServiceProtocol
+    
+    init(networkService: NetworkServiceProtocol) {
+        self.networkService = networkService
+        //start()
         loadAds()
     }
     
     
     func loadAds() {
-        guard let request = makeGetRequest(urlStr: ApiURL.ads()) else {
+        guard let url = Endpoint.ads().url else {
             return
         }
         
         loading = true
-        URLSession.shared.dataTaskPublisher(for: request)
-            .receive(on: DispatchQueue.main)
-            .tryMap(handleOutput(output:))
-            .decode(type: [Advertisement].self, decoder: JSONDecoder())
+        networkService.publisher(for: url, responseType: [Advertisement].self)
             .sink { [weak self] (completion) in
                 switch completion {
                 case .finished:
-                   
                     print("finished")
-                    
                 case .failure(let error):
                     print(error)
                     print("HATA OLDU")
+                    self?.error = "Hata oldu"
                 }
                 self?.loading = false
                 print("COMPLETION: \(completion)")
@@ -63,23 +63,6 @@ class AdvertisementCarouselViewModel: ObservableObject {
               }
         return data
     }
-    
-
-    private func makeGetRequest(urlStr: String) -> URLRequest? {
-        guard let url = URL(string: urlStr) else {
-            print("Error: cannot create URL")
-            return nil
-        }
-        
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        // Create the request
-        return request
-    }
-    
     
     
     func resumeIfPaused() {
@@ -105,11 +88,14 @@ class AdvertisementCarouselViewModel: ObservableObject {
 }
 
 struct AdvertisementCarouselView: View {
-    @StateObject var viewModel: AdvertisementCarouselViewModel = AdvertisementCarouselViewModel()
+    @StateObject var viewModel: AdvertisementCarouselViewModel = AdvertisementCarouselViewModel(networkService: Dependencies.instance.networkService)
     
     var body: some View {
         if viewModel.loading {
             ProgressView()
+        }
+        else if (viewModel.error != nil) {
+            Rectangle()
         }
         else {
             TabView(selection: $viewModel.selectedTab) {
@@ -118,18 +104,11 @@ struct AdvertisementCarouselView: View {
                         image
                             .resizable()
                             .scaledToFill()
-                            //.clipShape(RoundedRectangle(cornerRadius: 5))
-                            //.shadow(radius: 2)
+
                     } placeholder: {
                         ProgressView()
                     }
                     .tag(index)
-                    /*
-                     Rectangle()
-                     .foregroundColor(viewModel.ads[index])
-                     .tag(index)
-                     */
-                    
                 }
             }
             .onAppear(perform: {

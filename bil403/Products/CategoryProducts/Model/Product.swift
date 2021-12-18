@@ -9,16 +9,10 @@ import Foundation
 
 
 struct Product: Identifiable, Codable {
-    let id: Int
-    let name: String
-    let image: String
-    let cost: Double
-    let additionalInfo: String
+    var id: Int
+    var name: String
+    var image: String
+    var cost: Double
+    var additionalInfo: String
     var category: String?
-    
-    /*
-    private enum CodingKeys : String, CodingKey {
-        case id="Id", image="Image", cost="Price", additionalInfo="Description"
-    }
-     */
 }

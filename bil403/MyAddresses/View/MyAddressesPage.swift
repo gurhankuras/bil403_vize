@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MyAddressesPage: View {
-    @StateObject var vm: MyAddressesViewModel = MyAddressesViewModel()
+    @StateObject var vm: MyAddressesViewModel = MyAddressesViewModel(networkService: Dependencies.instance.networkService)
     
     var body: some View {
         VStack(alignment: .leading) {

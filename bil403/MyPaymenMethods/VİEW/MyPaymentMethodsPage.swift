@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct MyPaymentMethodsPage: View {
-    @StateObject var vm: MyPaymentMethodsViewModel = MyPaymentMethodsViewModel()
+    @StateObject var vm: MyPaymentMethodsViewModel = MyPaymentMethodsViewModel(networkService: Dependencies.instance.networkService)
     var body: some View {
         
         VStack(alignment: .leading) {

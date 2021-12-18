@@ -9,7 +9,7 @@ import SwiftUI
 
 @main
 struct bil403App: App {
-   // @UIApplicationDelegateAdaptor var delegate: FSAppDelegate
+   @UIApplicationDelegateAdaptor var delegate: FSAppDelegate
 
     var body: some Scene {
         WindowGroup {
@@ -19,15 +19,16 @@ struct bil403App: App {
     }
 }
 
-/*
+
 
 class FSAppDelegate: NSObject, UIApplicationDelegate {
   func application(
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
   ) -> Bool {
+      Dependencies.initiliase(env: .prod)
     // ...
     return true
   }
 }
-*/
+

@@ -14,7 +14,7 @@ struct SearchProductPage: View {
     ]
 
     @State var searchText: String = ""
-    @StateObject var vm: SearchViewModel = SearchViewModel()
+    @StateObject var vm: SearchViewModel = SearchViewModel(networkService: Dependencies.instance.networkService)
     
     //@FocusState private var searchFieldFocused = true
 

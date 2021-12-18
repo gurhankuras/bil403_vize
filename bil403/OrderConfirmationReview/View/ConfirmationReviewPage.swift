@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct ConfirmationReviewPage: View {
-    @Environment(\.presentationMode) var presentationMode
-//    @Environment(\.rootPresentationMode) var rootPresentationMode;
+    @Environment(\.dismiss) var dismiss
+
     @EnvironmentObject var navigationHelper: NavigationHelper
     @EnvironmentObject var cart: Cart
-    @StateObject var vm: OrderConfirmationViewModel = OrderConfirmationViewModel()
+    @StateObject var vm: OrderConfirmationViewModel = OrderConfirmationViewModel(networkService: Dependencies.instance.networkService)
     
     let address: Address
     let paymentMethod: PaymentMethod
@@ -28,24 +28,12 @@ struct ConfirmationReviewPage: View {
                 }
                 AddressTile2(address: address)
                 PaymentMethodTile2(method: paymentMethod)
-                //Spacer()
                 Button {
                     vm.order(order: cart.toOrder(addressId: address.id, paymentMethod: paymentMethod.id))
-                    /*
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
-                        isLoading.toggle()
-                        // navigationHelper.close()
-                        presentationMode.wrappedValue.dismiss()
-                        presentationMode.wrappedValue.dismiss()
-                    }
-                     */
-                    
-                    // rootPresentationMode.wrappedValue.close()
                 } label: {
                     ButtonUIView(text: "Onayla".uppercased())
                 }
-                
-                // PaymentMethodTile(
+
             }
             .navigationTitle("Doğrulama")
             
@@ -55,8 +43,8 @@ struct ConfirmationReviewPage: View {
         }
         .alert(vm.operationResultMessage ?? "", isPresented: $vm.showMessage) {
             Button {
-                presentationMode.wrappedValue.dismiss()
-                presentationMode.wrappedValue.dismiss()
+                dismiss()
+                dismiss()
             } label: {
                 Text("Tamam")
             }

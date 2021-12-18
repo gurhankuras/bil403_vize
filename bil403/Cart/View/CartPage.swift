@@ -53,7 +53,6 @@ struct CartPageBottomButton: View {
                 .foregroundColor(appPurple)
                 .bold()
                 .padding()
-                //.frame(maxWidth: .infinity)
                 .background(Color(.systemGray6))
                 
         }
@@ -65,11 +64,3 @@ struct CartPageBottomButton: View {
         .background(offWhite)
     }
 }
-
-/*
-struct CartPage_Previews: PreviewProvider {
-    static var previews: some View {
-        CartPage()
-    }
-}
-*/

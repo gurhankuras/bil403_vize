@@ -15,12 +15,8 @@ struct User: Identifiable, Decodable {
 }
 
 struct UserProfilePage: View {
-    /*
-    let user =
-    User(id: 3223, name: "Gürhan Kuraş", email: "gurhankuras@hotmail.com", phoneNumber: "05456877747")
-    */
     
-    @StateObject var vm: ProfileViewModel = ProfileViewModel()
+    @StateObject var vm: ProfileViewModel = ProfileViewModel(networkService: Dependencies.instance.networkService)
     
      let ab = ["asdsa", "asdasd", "sadasd"]
     var body: some View {
@@ -89,18 +85,6 @@ struct UserProfilePage: View {
                             .padding(5)
                     }
                     Divider().padding(.horizontal)
-                    /*
-                    NavigationLink {
-                        MyOrdersPage()
-                    } label: {
-                        UserInfoRow(icon: "bag.fill", text: Text("Geçmiş Siparişlerim")
-                                        .font(.caption)
-                                        .foregroundColor(.black)
-                                        .fontWeight(.semibold)
-                        )
-                            .padding(5)
-                    }
-                     */
                 }
                 .tint(appPurple)
                 .padding(.vertical)
@@ -112,7 +96,6 @@ struct UserProfilePage: View {
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarHidden(true)
         }
-        //Text("sUser")
     }
 }
 
@@ -148,12 +131,6 @@ struct UserInfoRow: View {
     var body: some View {
         HStack {
             Label {
-                /*
-                Text(text)
-                    .font(.caption)
-                    .foregroundColor(Color(.systemGray))
-                    .fontWeight(.semibold)
-                 */
                 text
             } icon: {
                 Image(systemName: icon)

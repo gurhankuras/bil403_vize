@@ -8,15 +8,16 @@
 import Foundation
 import Combine
 
-class ApiMessage: Decodable {
+struct ApiMessage: Decodable {
     let message: String
 }
 
-class OrderConfirmationViewModel: ObservableObject {
+final class OrderConfirmationViewModel: ObservableObject {
     @Published var loading: Bool = false
     @Published var operationResultMessage: String? = nil
     @Published var showMessage: Bool = false
     
+    private let networkService: NetworkServiceProtocol
     weak var cart: Cart?
 
     var cancellables = Set<AnyCancellable>()
@@ -25,7 +26,8 @@ class OrderConfirmationViewModel: ObservableObject {
         self.cart = cart
     }
     
-    init() {
+    init(networkService: NetworkServiceProtocol) {
+        self.networkService = networkService
         $showMessage.sink {[weak self] show in
             if !show {
                 self?.operationResultMessage = nil
@@ -35,15 +37,14 @@ class OrderConfirmationViewModel: ObservableObject {
     }
    
     func order(order: Order) {
-        guard let request = makePostRequest(urlStr: ApiURL.order(), body: order.toDict()) else {
+        
+        guard let request = networkService.makeRequest(to: Endpoint.order(), with: order, method: .post) else {
             return
         }
         
         loading = true
-        URLSession.shared.dataTaskPublisher(for: request)
-            .receive(on: DispatchQueue.main)
-            .tryMap(handleOutput(output:))
-            .decode(type: ApiMessage.self, decoder: JSONDecoder())
+        
+        networkService.publisher(for: request, responseType: ApiMessage.self, decoder: JSONDecoder())
             .sink { [weak self] (completion) in
                 switch completion {
                 case .finished:
@@ -63,45 +64,5 @@ class OrderConfirmationViewModel: ObservableObject {
                 self?.showMessage = true
             }
             .store(in: &cancellables)
-        
-    }
-    
-    private func handleOutput(output: URLSession.DataTaskPublisher.Output) throws -> Data {
-        let (data, response) = output;
-        guard let response = response as? HTTPURLResponse,
-              response.isGoodStatusCode else {
-                  throw URLError(.badServerResponse)
-              }
-        return data
-    }
-    
-
-    private func makePostRequest(urlStr: String, body: [String: Any]) -> URLRequest? {
-        guard let url = URL(string: urlStr) else {
-            print("Error: cannot create URL")
-            return nil
-        }
-        
-        /*
-        guard let parameters = processInputs() else {
-            return nil
-        }
-         */
-        let parameters = body
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
-
-        do {
-            request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: .prettyPrinted) // pass dictionary to nsdata object and set it as request body
-        } catch let error {
-            print(error.localizedDescription)
-            return nil
-        }
-        
-        // Create the request
-        return request
     }
 }

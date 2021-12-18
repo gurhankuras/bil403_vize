@@ -8,24 +8,25 @@
 import Foundation
 import Combine
 
-class SearchViewModel: ObservableObject {
+final class SearchViewModel: ObservableObject {
     @Published var products = [Product]()
     @Published var loading: Bool = false
 
     
     var cancellables = Set<AnyCancellable>()
+    private let networkService: NetworkServiceProtocol
     
+    init(networkService: NetworkServiceProtocol) {
+        self.networkService = networkService
+    }
     
     func loadProducts(query: String) {
-        guard let request = makeGetRequest(urlStr: ApiURL.searchProduct(q: query)) else {
+        guard let url = Endpoint.search(matching: query).url else {
             return
         }
         
         loading = true
-        URLSession.shared.dataTaskPublisher(for: request)
-            .receive(on: DispatchQueue.main)
-            .tryMap(handleOutput(output:))
-            .decode(type: [Product].self, decoder: JSONDecoder())
+        networkService.publisher(for: url, responseType: [Product].self)
             .sink { [weak self] (completion) in
                 switch completion {
                 case .finished:
@@ -42,30 +43,6 @@ class SearchViewModel: ObservableObject {
                 self?.products = products
             }
             .store(in: &cancellables)
-        
     }
-    
-    private func handleOutput(output: URLSession.DataTaskPublisher.Output) throws -> Data {
-        let (data, response) = output;
-        guard let response = response as? HTTPURLResponse,
-              response.isGoodStatusCode else {
-                  throw URLError(.badServerResponse)
-              }
-        return data
-    }
-    
 
-    private func makeGetRequest(urlStr: String) -> URLRequest? {
-        guard let url = URL(string: urlStr) else {
-            print("Error: cannot create URL")
-            return nil
-        }
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        // Create the request
-        return request
-    }
 }
