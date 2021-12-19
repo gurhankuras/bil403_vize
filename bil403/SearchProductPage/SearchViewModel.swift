@@ -28,11 +28,12 @@ final class SearchViewModel: ObservableObject {
         .debounce(for: 0.6, scheduler: DispatchQueue.main)
         .map({ $0.trimmingCharacters(in: .whitespaces) })
         .filter({ !$0.isEmpty})
-        .flatMap({
+        .map({
             return self.productService.search(matching: $0)
                 .replaceError(with: [])
                 .eraseToAnyPublisher()
         })
+        .switchToLatest()
         .removeDuplicates(by: { $0 == $1 })
         .sink { [weak self] products in
             print("Receive value'ya girdi")
