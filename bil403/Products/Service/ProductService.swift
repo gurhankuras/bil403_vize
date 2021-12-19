@@ -10,19 +10,32 @@ import Combine
 
 protocol ProductServiceProtocol {
     func getProductsBy(category: String) -> AnyPublisher<[Product], Error>
+    func search(matching query: String) -> AnyPublisher<[Product], Error>
 }
 
 
 final class ProductService: ProductServiceProtocol {
     
-    init() {
+    private let networkService: NetworkServiceProtocol
+    init(networkService: NetworkServiceProtocol) {
+        self.networkService = networkService
         print("ProductService Initiliazed")
     }
     
+    
+    func search(matching query: String) -> AnyPublisher<[Product], Error> {
+        guard let url = Endpoint.search(matching: query, sortedBy: .recency).url else {
+            return Just([])
+                .setFailureType(to: Error.self)
+                .eraseToAnyPublisher()
+        }
+        return networkService.publisher(for: url, responseType: [Product].self, decoder: .init())
+    }
+     
+    
     func getProductsBy(category: String) -> AnyPublisher<[Product], Error> {
         guard let request = makeRequest(for: "sadasdasd") else {
-            return
-            Just([Product]())
+            return Just([Product]())
                 .setFailureType(to: Error.self)
                 .eraseToAnyPublisher()
         }
@@ -47,7 +60,7 @@ final class ProductService: ProductServiceProtocol {
         
 }
 
-
+/*
 final class MockProductService: ProductServiceProtocol {
     private let defaultProducts
     = [
@@ -89,3 +102,4 @@ final class MockProductService: ProductServiceProtocol {
     
 }
 
+*/

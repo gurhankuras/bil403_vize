@@ -15,9 +15,9 @@ class Dependencies {
     var networkService: NetworkServiceProtocol!
     lazy var productService: ProductServiceProtocol = {
         if self.env == .prod {
-            return ProductService()
+            return ProductService(networkService: networkService)
         }
-        return ProductService()
+        return ProductService(networkService: networkService)
     }()
     
     let env: Env

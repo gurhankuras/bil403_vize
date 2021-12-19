@@ -32,7 +32,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "117"
             endingLineNumber = "117"
-            landmarkName = "test_Cart_add_shouldReturnTotalAmountWhenAddedTwoDifferentItem()"
+            landmarkName = "test_Cart_add_shouldBeStackedCorrectly()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

@@ -13,7 +13,7 @@ class Cart_Tests: XCTestCase {
     var cart: Cart?
 
     override func setUpWithError() throws {
-        cart = Cart()
+        cart = Cart(networkService: NetworkService())
     }
 
     override func tearDownWithError() throws {
@@ -23,13 +23,13 @@ class Cart_Tests: XCTestCase {
     
     // MARK: isEmpty()
     func test_Cart_isEmpty_shouldReturnTrueIfCartHasNoItem() {
-        let cart = Cart(data: [:])
+        let cart = Cart(networkService: NetworkService(), data: [:])
         
         XCTAssertTrue(cart.isEmpty)
     }
     
     func test_Cart_isEmpty_shouldHasNoItemWhenDefaultInitiliazed() {
-        let cart = Cart()
+        let cart = Cart(networkService: NetworkService())
         
         XCTAssertTrue(cart.isEmpty)
     }
@@ -38,7 +38,7 @@ class Cart_Tests: XCTestCase {
         let product = Product.stub(withID: 1)
         let cartItem = CartItem(product: product, count: 1)
         
-        let cart = Cart(data: [product.id: cartItem])
+        let cart = Cart(networkService: NetworkService(), data: [product.id: cartItem])
         
         XCTAssertTrue(!cart.isEmpty)
     }

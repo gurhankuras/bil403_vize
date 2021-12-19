@@ -68,7 +68,7 @@ struct UserProfilePage: View {
                     } label: {
                         UserInfoRow(icon: "location.fill", text: Text("Adreslerim")
                                         .font(.caption)
-                                        .foregroundColor(.black)
+                                        .foregroundColor(.primary)
                                         .fontWeight(.semibold)
                         )
                             .padding(5)
@@ -79,7 +79,7 @@ struct UserProfilePage: View {
                     } label: {
                         UserInfoRow(icon: "creditcard.fill", text: Text("Ödeme Yöntemlerim")
                                         .font(.caption)
-                                        .foregroundColor(.black)
+                                        .foregroundColor(.primary)
                                         .fontWeight(.semibold)
                         )
                             .padding(5)

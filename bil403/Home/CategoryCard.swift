@@ -30,7 +30,7 @@ struct CategoryCard: View {
                 Text(category.title)
                     .font(.caption)
                     .fontWeight(.semibold)
-            }.foregroundColor(appPurple)
+            }.foregroundColor(.primary)
         }
         .tint(appPurple)
     }

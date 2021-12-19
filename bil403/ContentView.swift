@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject var cart = Cart()
+    @StateObject var cart = Cart(networkService: Dependencies.instance.networkService)
     
     var body: some View {
        

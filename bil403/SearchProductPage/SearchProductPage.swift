@@ -13,7 +13,7 @@ struct SearchProductPage: View {
         GridItem(.adaptive(minimum: 100))
     ]
 
-    @State var searchText: String = ""
+
     @StateObject var vm: SearchViewModel = SearchViewModel(networkService: Dependencies.instance.networkService)
     
     //@FocusState private var searchFieldFocused = true
@@ -44,7 +44,7 @@ struct SearchProductPage: View {
                         .scaleEffect(1.0)
                     TextField(
                         "Ürün Ara",
-                        text: $searchText
+                        text: $vm.query
                     )
                     //.focused($searchFieldFocused)
                         .font(.subheadline)
@@ -57,7 +57,7 @@ struct SearchProductPage: View {
                         .padding(.leading, 7)
                     
                     Button {
-                        vm.loadProducts(query: searchText)
+                        vm.loadProducts(query: vm.query)
                     } label: {
                         Text("Ara")
                             .padding()
@@ -70,7 +70,7 @@ struct SearchProductPage: View {
                 //.background()
                 //.clipShape(RoundedRectangle(cornerRadius: 10))
                 //.shadow(radius: 2, x: 0, y: 3)
-                .background(Color.white)
+                .background(Color(.systemBackground))
                 .cornerRadius(2.0)
                 .shadow(radius: 3)
                

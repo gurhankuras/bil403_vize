@@ -94,6 +94,13 @@ extension Endpoint {
         )
     }
     
+    static func stock(for productId: Product.ID) -> Endpoint {
+        return Endpoint(
+            path: "/api/products/\(productId)/stock",
+            queryItems: []
+        )
+    }
+    
 }
 
 enum ProdCategory: String {

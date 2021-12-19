@@ -30,6 +30,7 @@ struct CategoryProductsView: View {
     }
 }
 
+/*
 struct CategoryProductsView_Previews: PreviewProvider {
     static let category = Category(id: ProdCategory.kisiselBakim, title: "Meyve & Sebze",image: "" )
     
@@ -42,7 +43,7 @@ struct CategoryProductsView_Previews: PreviewProvider {
 
 
 
-
+*/
 struct ProductsGrid: View {
     @Binding var products: [Product]
     // let data = (1...10).map { "Item \($0)" }

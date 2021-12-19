@@ -6,19 +6,26 @@
 //
 
 import Foundation
+import Combine
 
 final class Cart: ObservableObject {
-    enum CartError: Error {
-        case keyNotFound
-    }
+    private let networkService: NetworkServiceProtocol
+    
+    var cancellable: AnyCancellable?
     
     @Published var items = [Int: CartItem]()
     @Published var loading = false
     @Published var totalAmount = 0.0
     
-    init(data: [Int: CartItem] = [:]) {
+    init(networkService: NetworkServiceProtocol, data: [Int: CartItem] = [:]) {
         self.items = data
+        self.networkService = networkService
     }
+    
+    enum CartError: Error {
+        case keyNotFound
+    }
+
     
     var isEmpty: Bool {
         return items.isEmpty
@@ -30,17 +37,40 @@ final class Cart: ObservableObject {
         }
     }
     func add(product: Product) {
-        objectWillChange.send()
-        guard let existingItem = items[product.id] else {
-            let item = CartItem(product: product, count: 1)
-            items.updateValue(item, forKey: product.id)
-            totalAmount = calculateTotalAmount()
+        guard let url = networkService.makeRequest(to: Endpoint.stock(for: product.id), with: 1, method: .delete)  else {
+            print("URL is malformed")
             return
         }
         
-        let updatedItem = CartItem(product: existingItem.product, count: existingItem.count + 1)
-        items.updateValue(updatedItem, forKey: product.id)
-        totalAmount = calculateTotalAmount()
+        cancellable = networkService
+            .publisher(for: url, responseType: ApiMessage.self, decoder: JSONDecoder())
+            .sink(receiveCompletion: { [weak self] completion in
+                switch completion {
+                case .failure(let error):
+                    print("ERROR")
+                    print(error.localizedDescription)
+                    break
+                case .finished:
+                    break
+                }
+                self?.cancellable?.cancel()
+                
+            }, receiveValue: { [weak self] message in
+                guard let self = self else {
+                    return
+                }
+                self.objectWillChange.send()
+                guard let existingItem = self.items[product.id] else {
+                    let item = CartItem(product: product, count: 1)
+                    self.items.updateValue(item, forKey: product.id)
+                    self.totalAmount = self.calculateTotalAmount()
+                    return
+                }
+                
+                let updatedItem = CartItem(product: existingItem.product, count: existingItem.count + 1)
+                self.items.updateValue(updatedItem, forKey: product.id)
+                self.totalAmount = self.calculateTotalAmount()
+            })
     }
     
     // TODO: TEST

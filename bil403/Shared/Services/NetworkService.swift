@@ -97,15 +97,22 @@ extension NetworkService {
             return nil
         }
         
+        var request = URLRequest(url: url)
+        request.httpMethod = method.rawValue
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        /*
+        guard let encodable: T = encodable else {
+            return request
+        }
+         */
+        
         guard let bodyData = try? JSONEncoder().encode(encodable) else {
             print("Error: cannot encode object")
             return nil
         }
         
-        var request = URLRequest(url: url)
-        request.httpMethod = method.rawValue
         request.httpBody = bodyData
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
         return request
     }

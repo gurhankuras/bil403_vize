@@ -12,7 +12,7 @@ struct ProductsView: View {
     let categories: [Category]
     @State var currentId: ProdCategory
     @EnvironmentObject var navigationHelper: NavigationHelper
-    let productService: ProductServiceProtocol = MockProductService()
+    let productService: ProductServiceProtocol = Dependencies.instance.productService
     
     // @State private var isShowingSelectPage = false
     
