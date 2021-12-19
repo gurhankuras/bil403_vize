@@ -11,7 +11,7 @@ import Foundation
 ///
 struct Endpoint {
     static let port = 5000
-    static let host = "localhost"
+    static let host = "127.0.0.1"
     static let schema = "http"
     
     let path: String

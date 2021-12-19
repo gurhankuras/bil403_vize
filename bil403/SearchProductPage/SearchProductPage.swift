@@ -14,7 +14,7 @@ struct SearchProductPage: View {
     ]
 
 
-    @StateObject var vm: SearchViewModel = SearchViewModel(networkService: Dependencies.instance.networkService)
+    @StateObject var vm: SearchViewModel = SearchViewModel(productService: Dependencies.instance.productService)
     
     //@FocusState private var searchFieldFocused = true
 
@@ -55,7 +55,7 @@ struct SearchProductPage: View {
                         .disableAutocorrection(true)
                         .padding(.vertical)
                         .padding(.leading, 7)
-                    
+                    /*
                     Button {
                         vm.loadProducts(query: vm.query)
                     } label: {
@@ -63,6 +63,7 @@ struct SearchProductPage: View {
                             .padding()
                                                 
                     }
+                     */
                 }
                 .frame(maxWidth: .infinity)
                 

@@ -28,7 +28,6 @@ struct ContentView: View {
                     .tabItem {
                         Image(systemName: "person.fill")
                     }
-            
             }
             .shadow(radius: 2)
             .accentColor(appPurple)
