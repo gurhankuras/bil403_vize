@@ -31,9 +31,11 @@ struct HomeView: View {
                 .background(appPurple)
                
                 ScrollView {
+                    
                     AdvertisementCarouselView()
                         .frame(width: UIScreen.main.bounds.width, height: 200)
-                    CategoriesGrid()
+                    
+                     CategoriesGrid()
                 }
                 
             }

@@ -13,7 +13,7 @@ struct bil403App: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            SplashView()
                 // added for closing keyboard when clicked outside of field
                 .onAppear(perform: UIApplication.shared.addTapGestureRecognizer)
                 .environmentObject(NavigationHelper())

@@ -20,6 +20,10 @@ final class ProfileViewModel: ObservableObject {
         loadUser()
     }
     
+    deinit {
+        
+        print("\(Self.self) DEINIT")
+    }
     
     func loadUser() {
         guard let url = Endpoint.user(for: 1).url else {

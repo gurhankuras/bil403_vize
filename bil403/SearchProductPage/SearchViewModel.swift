@@ -13,6 +13,10 @@ final class SearchViewModel: ObservableObject {
     @Published var loading: Bool = false
     @Published var query: String = ""
 
+    deinit {
+        print("\(Self.self) DEINIT")
+    }
+    
     var cancellables = Set<AnyCancellable>()
 
     private let productService: ProductServiceProtocol

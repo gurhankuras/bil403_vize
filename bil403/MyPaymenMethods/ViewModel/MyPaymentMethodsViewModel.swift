@@ -12,6 +12,11 @@ final class MyPaymentMethodsViewModel: ObservableObject {
     @Published var paymentMethods = [PaymentMethod]()
     @Published var loading: Bool = false
 
+    
+    deinit {
+        
+        print("\(Self.self) DEINIT")
+    }
     var cancellables = Set<AnyCancellable>()
     
     private let networkService: NetworkServiceProtocol

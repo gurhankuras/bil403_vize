@@ -18,6 +18,11 @@ struct UserProfilePage: View {
     
     @StateObject var vm: ProfileViewModel = ProfileViewModel(networkService: Dependencies.instance.networkService)
     
+    init() {
+    
+    }
+    
+    
      let ab = ["asdsa", "asdasd", "sadasd"]
     var body: some View {
         
@@ -95,6 +100,7 @@ struct UserProfilePage: View {
             }
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarHidden(true)
+            .navigationViewStyle(StackNavigationViewStyle())
         }
     }
 }

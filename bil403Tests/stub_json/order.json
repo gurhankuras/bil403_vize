@@ -1,0 +1,19 @@
+{
+    "userId": 1,
+    "addressId": 1,
+    "paymentMethodId": 2,
+    "purchasedItems": [
+        {
+            "productId": 1,
+            "count": 2
+        },
+        {
+            "productId": 2,
+            "count": 1
+        },
+        {
+            "productId": 3,
+            "count": 2
+        }
+    ]
+}

@@ -8,12 +8,22 @@
 import XCTest
 @testable import bil403
 
+
+
 class Cart_Tests: XCTestCase {
     
     var cart: Cart?
+    var networkService: NetworkServiceProtocol?
+    var productService: ProductServiceProtocol?
+    
+    func makeFailingCart() -> Cart {
+        return Cart(productService: MockProductService.failingService())
+    }
 
     override func setUpWithError() throws {
-        cart = Cart(networkService: NetworkService())
+        networkService = NetworkService()
+        productService = ProductService(networkService: networkService!)
+        cart = Cart(productService: productService!)
     }
 
     override func tearDownWithError() throws {
@@ -23,13 +33,13 @@ class Cart_Tests: XCTestCase {
     
     // MARK: isEmpty()
     func test_Cart_isEmpty_shouldReturnTrueIfCartHasNoItem() {
-        let cart = Cart(networkService: NetworkService(), data: [:])
+        let cart = Cart(productService: productService!, data: [:])
         
         XCTAssertTrue(cart.isEmpty)
     }
     
     func test_Cart_isEmpty_shouldHasNoItemWhenDefaultInitiliazed() {
-        let cart = Cart(networkService: NetworkService())
+        let cart = Cart(productService: productService!)
         
         XCTAssertTrue(cart.isEmpty)
     }
@@ -38,18 +48,17 @@ class Cart_Tests: XCTestCase {
         let product = Product.stub(withID: 1)
         let cartItem = CartItem(product: product, count: 1)
         
-        let cart = Cart(networkService: NetworkService(), data: [product.id: cartItem])
+        let cart = Cart(productService: productService!, data: [product.id: cartItem])
         
         XCTAssertTrue(!cart.isEmpty)
     }
         
     
     // MARK: add()
-    func test_Cart_add_shouldAddItemIfNotExists() {
-        guard let cart = cart else {
-            XCTFail("Some problem occured related to initialization of Cart")
-            return
-        }
+    func test_Cart_add_shouldAddItemIfNotExists_whenAddingSucceeded() {
+        let mockProductService = MockProductService.succedingService(products: nil, message: .init(message: "mock"))
+        
+        let cart = Cart(productService: mockProductService)
         
         let product = Product.stub(withID: 1)
         
@@ -60,11 +69,21 @@ class Cart_Tests: XCTestCase {
         XCTAssertFalse(cart.isEmpty)
     }
     
-    func test_Cart_add_totalAmountShouldBeChangedWhenAddedNonFreeItem() {
-        guard let cart = cart else {
-            XCTFail("Some problem occured related to initialization of Cart")
-            return
-        }
+    func test_Cart_add_shouldNotAddItemIfNotExists_whenAddingFailed() {
+        let cart = makeFailingCart()
+        let product = Product.stub(withID: 1)
+        
+        // Act
+        cart.add(product: product)
+        
+        // Assert
+        XCTAssertTrue(cart.isEmpty)
+    }
+    
+    func test_Cart_add_totalAmountShouldBeChangedWhenAddedNonFreeItem_whenAddingSucceeded() {
+        let mockProductService = MockProductService.succedingService(products: nil, message: .init(message: "mock"))
+        
+        let cart = Cart(productService: mockProductService)
             
         let expectedTotalAmount = Double.random(in: 1..<10)
         let product = Product.stub(withID: 2)
@@ -77,11 +96,26 @@ class Cart_Tests: XCTestCase {
         XCTAssertEqual(expectedTotalAmount, totalAmount)
     }
     
-    func test_Cart_add_shouldBeStackedWhenSameItemAdded() {
-        guard let cart = cart else {
-            XCTFail("Some problem occured related to initialization of Cart")
-            return
-        }
+    func test_Cart_add_totalAmountShouldNotBeChangedWhenAddedNonFreeItem_whenAddingFailed() {
+        let cart = makeFailingCart()
+        
+        let productPrice = Double.random(in: 1..<10)
+        let product = Product.stub(withID: 2)
+            .setting(\.cost, to: productPrice)
+        
+        let totalAmountBeforeAddingAttempt = cart.calculateTotalAmount()
+        
+        // Act
+        cart.add(product: product)
+        
+        let totalAmountAfterAddingAttempt = cart.calculateTotalAmount()
+        XCTAssertEqual(totalAmountBeforeAddingAttempt, totalAmountAfterAddingAttempt)
+    }
+    
+    func test_Cart_add_shouldBeStackedWhenSameItemAdded_whenAddingSucceeded() {
+        let mockProductService = MockProductService.succedingService(products: nil, message: .init(message: "mock"))
+        
+        let cart = Cart(productService: mockProductService)
             
         let product1 = Product.stub(withID: 1)
         let product2 = Product.stub(withID: 1)
@@ -94,11 +128,27 @@ class Cart_Tests: XCTestCase {
         XCTAssertEqual(cart.items.count, 1)
     }
     
-    func test_Cart_add_shouldReturnTotalAmountWhenAddedTwoDifferentItem() {
-        guard let cart = cart else {
-            XCTFail("Some problem occured related to initialization of Cart")
-            return
-        }
+    func test_Cart_add_shouldNotBeStackedWhenSameItemAdded_whenAddingFailed() {
+        let succeedsMockService = MockProductService.succedingService(products: nil, message: .init(message: "mock"))
+        
+        let cart = Cart(productService: succeedsMockService)
+            
+        let product1 = Product.stub(withID: 1)
+        let product2 = Product.stub(withID: 1)
+
+        // Act
+        cart.add(product: product1)
+        cart.setProductService(service: MockProductService.failingService())
+        cart.add(product: product2)
+        
+        print(cart.items)
+        XCTAssertEqual(cart.items.count, 1)
+    }
+    
+    func test_Cart_add_shouldReturnTotalAmountWhenAddedTwoDifferentItem_whenAddingSucceded() {
+        let mockProductService = MockProductService.succedingService(products: nil, message: .init(message: "mock"))
+        
+        let cart = Cart(productService: mockProductService)
             
         let firstProductPrice = 2.5
         let secondPricePrice = 5.5
@@ -114,13 +164,12 @@ class Cart_Tests: XCTestCase {
         let expectedTotalAmount = cart.calculateTotalAmount()
         XCTAssertEqual(expectedTotalAmount, firstProductPrice + secondPricePrice)
     }
-    func test_Cart_add_shouldBeStackedCorrectly() {
+    func test_Cart_add_shouldBeStackedCorrectly_whenAddingSucceded() {
         
         // Prepare
-        guard let cart = cart else {
-            XCTFail("Some problem occured related to initialization of Cart")
-            return
-        }
+        let mockProductService = MockProductService(products: nil, error: nil, message: ApiMessage(message: "ekledim"))
+        
+        let cart = Cart(productService: mockProductService)
         
         let firstProductPrice = 2.5
         let secondProductPrice = 5.5
@@ -141,12 +190,11 @@ class Cart_Tests: XCTestCase {
         XCTAssertEqual(cart.items.count, 2)
     }
     
-    func test_Cart_add_shouldReturnTotalAmountWhenAddedTwoDifferentOneSameItem() {
+    func test_Cart_add_shouldReturnTotalAmountWhenAddedTwoDifferentOneSameItem_whenAddingSucceded() {
         // Prepare
-        guard let cart = cart else {
-            XCTFail("Some problem occured related to initialization of Cart")
-            return
-        }
+        let mockProductService = MockProductService(products: nil, error: nil, message: ApiMessage(message: "ekledim"))
+        
+        let cart = Cart(productService: mockProductService)
             
         let firstProductPrice = 2.5
         let secondProductPrice = 5.5
@@ -175,12 +223,11 @@ class Cart_Tests: XCTestCase {
 extension Cart_Tests {
     
     // MARK: totalAmount
-    func test_Cart_totalAmount_publishedTotalAmountShouldChangeWhenProductThatHasNotBeenAddedToCartAdded() {
+    func test_Cart_totalAmount_publishedTotalAmountShouldChangeWhenProductThatHasNotBeenAddedToCartAdded_whenAddingSucceded() {
         // Prepare
-        guard let cart = cart else {
-            XCTFail("Some problem occured related to initialization of Cart")
-            return
-        }
+        let mockProductService = MockProductService(products: nil, error: nil, message: ApiMessage(message: "ekledim"))
+        
+        let cart = Cart(productService: mockProductService)
         
         let price = 4.7
         let product = Product.stub(withID: 1)
@@ -194,12 +241,11 @@ extension Cart_Tests {
         XCTAssertEqual(expectedTotalAmount, cart.totalAmount)
     }
     
-    func test_Cart_totalAmount_publishedTotalAmountShouldChangeWhenSameProductAdded() {
+    func test_Cart_totalAmount_publishedTotalAmountShouldChangeWhenSameProductAdded_whenAddingSucceded() {
         // Prepare
-        guard let cart = cart else {
-            XCTFail("Some problem occured related to initialization of Cart")
-            return
-        }
+        let mockProductService = MockProductService(products: nil, error: nil, message: ApiMessage(message: "ekledim"))
+        
+        let cart = Cart(productService: mockProductService)
         
         let price = 4.7
         let firstProduct = Product.stub(withID: 1)
@@ -241,10 +287,9 @@ extension Cart_Tests {
     }
     
     func test_Cart_remove_cartItemShouldBeRemovedIfOnlyOneProductInBundle() {
-        guard let cart = cart else {
-            XCTFail("Some problem occured related to initialization of Cart")
-            return
-        }
+        let mockProductService = MockProductService(products: nil, error: nil, message: ApiMessage(message: "ekledim"))
+        
+        let cart = Cart(productService: mockProductService)
         
         // Given
         let product = Product.stub(withID: 1)
@@ -267,10 +312,9 @@ extension Cart_Tests {
     }
     
     func test_Cart_remove_cartItemShouldNotBeRemovedIfThereIsAtLeastOneProduct() {
-        guard let cart = cart else {
-            XCTFail("Some problem occured related to initialization of Cart")
-            return
-        }
+        let mockProductService = MockProductService(products: nil, error: nil, message: ApiMessage(message: "ekledim"))
+        
+        let cart = Cart(productService: mockProductService)
         
         // Given
         let product = Product.stub(withID: 1)
@@ -379,3 +423,47 @@ extension Cart_Tests {
     }
 }
 
+func readLocalJSONFile(forName name: String) -> Data? {
+    do {
+        if let filePath = Bundle(for: Cart_Tests.self).path(forResource: name, ofType: ".json") {
+            let fileUrl = URL(fileURLWithPath: filePath)
+            let data = try Data(contentsOf: fileUrl)
+            return data
+        }
+    } catch {
+        print("error: \(error)")
+    }
+    return nil
+}
+
+
+func parse<T: Decodable>(jsonData: Data, returnType: T.Type) -> T? {
+    do {
+        let decodedData = try JSONDecoder().decode(T.self, from: jsonData)
+        return decodedData
+    } catch {
+        print("error: \(error)")
+    }
+    return nil
+}
+
+struct ReadFileError: Error {}
+struct ParsingError: Error {}
+
+func readStub<T: Decodable>(forName: String, returnType: T.Type) throws -> T {
+    guard let data = readLocalJSONFile(forName: forName) else {
+        throw ReadFileError()
+    }
+
+    guard let person = parse(jsonData: data, returnType: returnType) else {
+        throw ParsingError()
+    }
+    
+    return person
+}
+
+
+extension Cart_Tests {
+   
+    
+}

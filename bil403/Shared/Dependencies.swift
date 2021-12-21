@@ -42,12 +42,10 @@ class Dependencies {
     }
     
     private func forProduction() {
-        print("BURADAYIM HELP ME")
         networkService = NetworkService()
     }
     
     private func forDevelopment() {
-        print("BURADAYIM HELP ME")
         networkService = NetworkService()
     }
 }

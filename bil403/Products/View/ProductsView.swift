@@ -23,7 +23,7 @@ struct ProductsView: View {
         // self.currentIndex = indexP
         let navBarAppearance = UINavigationBarAppearance()
         navBarAppearance.backButtonAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.white]
-        // print(" INIT \(self.isShowingSelectPage)")
+        print("\(Self.self) initiliazed...")
     }
     
   

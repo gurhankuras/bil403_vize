@@ -15,6 +15,11 @@ final class PaymentAddressSelectionViewModel: ObservableObject {
         Address(id: 4, address: "sdfsdfsd")
     ]
     
+    deinit {
+        
+        print("\(Self.self) DEINIT")
+    }
+    
     @Published var selectedAddress: Address
     @Published var selectedMethod: PaymentMethod
     

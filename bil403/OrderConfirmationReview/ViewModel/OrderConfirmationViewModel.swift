@@ -17,6 +17,18 @@ final class OrderConfirmationViewModel: ObservableObject {
     @Published var operationResultMessage: String? = nil
     @Published var showMessage: Bool = false
     
+    
+    deinit {
+        print("\(Self.self) DEINIT")
+    }
+    func invalidate() {
+        for cancelable in cancellables {
+            cancelable.cancel()
+        }
+        // cancellables = nil
+        print("[<<] invalidated")
+    }
+    
     private let networkService: NetworkServiceProtocol
     weak var cart: Cart?
 
@@ -25,6 +37,7 @@ final class OrderConfirmationViewModel: ObservableObject {
     func setCart(cart: Cart) {
         self.cart = cart
     }
+    
     
     init(networkService: NetworkServiceProtocol) {
         self.networkService = networkService

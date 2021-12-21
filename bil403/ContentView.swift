@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject var cart = Cart(networkService: Dependencies.instance.networkService)
+    @StateObject var cart = Cart(productService: Dependencies.instance.productService)
     
     var body: some View {
        
@@ -17,14 +17,16 @@ struct ContentView: View {
                     .tabItem {
                         Image(systemName: "house.fill")
                     }
-                
-                SearchProductPage()
+                LazyView {
+                    SearchProductPage()
+                }
                     .tabItem {
                         Image(systemName: "magnifyingglass")
                     }
                 
-                //Text("User Tab")
-                  UserProfilePage()
+                LazyView {
+                    UserProfilePage()
+                }
                     .tabItem {
                         Image(systemName: "person.fill")
                     }

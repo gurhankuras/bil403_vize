@@ -15,6 +15,11 @@ final class AdvertisementCarouselViewModel: ObservableObject {
     @Published var loading = false
     @Published var error: String?
     
+    deinit {
+        
+        print("\(Self.self) DEINIT")
+    }
+    
     var cancellables = Set<AnyCancellable>()
     
     var timer: AnyCancellable?
@@ -22,6 +27,7 @@ final class AdvertisementCarouselViewModel: ObservableObject {
     private let networkService: NetworkServiceProtocol
     
     init(networkService: NetworkServiceProtocol) {
+        print("\(Self.self) INIT")
         self.networkService = networkService
         //start()
         loadAds()
@@ -54,16 +60,6 @@ final class AdvertisementCarouselViewModel: ObservableObject {
             .store(in: &cancellables)
         
     }
-    
-    private func handleOutput(output: URLSession.DataTaskPublisher.Output) throws -> Data {
-        let (data, response) = output;
-        guard let response = response as? HTTPURLResponse,
-              response.isGoodStatusCode else {
-                  throw URLError(.badServerResponse)
-              }
-        return data
-    }
-    
     
     func resumeIfPaused() {
         guard timer == nil else { return }

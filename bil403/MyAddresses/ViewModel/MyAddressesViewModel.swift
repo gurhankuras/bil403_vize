@@ -12,9 +12,29 @@ final class MyAddressesViewModel: ObservableObject {
     @Published var addresses = [Address]()
     @Published var loading: Bool = false
 
-    
     var cancellables = Set<AnyCancellable>()
     private let networkService: NetworkServiceProtocol
+    
+    deinit {
+        for cancelable in cancellables {
+            cancelable.cancel()
+        }
+         
+        cancellables.removeAll()
+        // print("\(Self.self) DEINIT")
+    }
+    /*
+    func invalidate() {
+        
+        for cancelable in cancellables {
+            cancelable.cancel()
+        }
+         
+        cancellables.removeAll()
+        // cancellables = nil
+        print("[<<] invalidated")
+    }
+     */
     
     init(networkService: NetworkServiceProtocol) {
         self.networkService = networkService

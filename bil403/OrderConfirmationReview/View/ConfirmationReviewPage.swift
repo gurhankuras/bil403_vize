@@ -17,6 +17,7 @@ struct ConfirmationReviewPage: View {
     let address: Address
     let paymentMethod: PaymentMethod
     
+  
     
     var body: some View {
         ZStack {
@@ -36,10 +37,11 @@ struct ConfirmationReviewPage: View {
 
             }
             .navigationTitle("Doğrulama")
-            
+            /*
             if vm.loading {
                 AppAlert()
             }
+             */
         }
         .alert(vm.operationResultMessage ?? "", isPresented: $vm.showMessage) {
             Button {
@@ -53,6 +55,9 @@ struct ConfirmationReviewPage: View {
         }
         .onAppear {
             vm.setCart(cart: cart)
+        }
+        .onDisappear {
+            vm.invalidate()
         }
     }
 }

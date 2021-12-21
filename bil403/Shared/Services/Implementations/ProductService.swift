@@ -1,27 +1,49 @@
 //
-//  ProductService.swift
+//  ProductServiceProtocol.swift
 //  bil403
 //
-//  Created by Gürhan Kuraş on 12/10/21.
+//  Created by Gürhan Kuraş on 12/20/21.
 //
 
 import Foundation
 import Combine
 
-protocol ProductServiceProtocol {
-    func getProductsBy(category: String) -> AnyPublisher<[Product], Error>
-    func search(matching query: String) -> AnyPublisher<[Product], Error>
-}
-
 
 final class ProductService: ProductServiceProtocol {
     
+    struct MalformedURLError: Error {}
+    
     private let networkService: NetworkServiceProtocol
+    
     init(networkService: NetworkServiceProtocol) {
         self.networkService = networkService
         print("ProductService Initiliazed")
     }
     
+    
+    func reduceStock(for productId: Product.ID) -> AnyPublisher<ApiMessage, Error> {
+        guard let url = networkService.makeRequest(to: Endpoint.stock(for: productId), with: productId, method: .delete)  else {
+            print("URL is malformed")
+            return Fail(error: MalformedURLError())
+                .eraseToAnyPublisher()
+        }
+       return networkService
+            .publisher(for: url, responseType: ApiMessage.self, decoder: JSONDecoder())
+            .eraseToAnyPublisher()
+    }
+    
+    func fetch(by category: ProdCategory) -> AnyPublisher<[Product], Error> {
+        guard let url = Endpoint.products(by: category).url else {
+            return Fail(error: MalformedURLError())
+                .eraseToAnyPublisher()
+        }
+        
+        return networkService.publisher(for: url, responseType: [Product].self, decoder: .init())
+    }
+   
+    
+    
+   
     
     func search(matching query: String) -> AnyPublisher<[Product], Error> {
         guard let url = Endpoint.search(matching: query, sortedBy: .recency).url else {
@@ -32,7 +54,7 @@ final class ProductService: ProductServiceProtocol {
         return networkService.publisher(for: url, responseType: [Product].self, decoder: .init())
     }
      
-    
+    /*
     func getProductsBy(category: String) -> AnyPublisher<[Product], Error> {
         guard let request = makeRequest(for: "sadasdasd") else {
             return Just([Product]())
@@ -46,19 +68,10 @@ final class ProductService: ProductServiceProtocol {
                     .receive(on: DispatchQueue.main)
                     .eraseToAnyPublisher()
     }
-       
-    func makeRequest(for urlString: String) -> URLRequest? {
-           guard let url = URL(string: urlString) else {
-               print("Error: cannot create URL")
-               return nil
-           }
-           // Create the request
-           var request = URLRequest(url: url)
-           request.httpMethod = "DELETE"
-           return request
-       }
+     */
         
 }
+
 
 /*
 final class MockProductService: ProductServiceProtocol {

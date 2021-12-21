@@ -7,7 +7,7 @@
 
 import Foundation
 
-
+// TODO: Delete
 struct ProductCategory {
     let name: String
     let id: String

@@ -9,17 +9,17 @@ import Foundation
 import Combine
 
 final class Cart: ObservableObject {
-    private let networkService: NetworkServiceProtocol
-    
+    // private let networkService: NetworkServiceProtocol
+    private var productService: ProductServiceProtocol
     var cancellable: AnyCancellable?
     
     @Published var items = [Int: CartItem]()
     @Published var loading = false
     @Published var totalAmount = 0.0
     
-    init(networkService: NetworkServiceProtocol, data: [Int: CartItem] = [:]) {
+    init(productService: ProductServiceProtocol, data: [Int: CartItem] = [:]) {
         self.items = data
-        self.networkService = networkService
+        self.productService = productService
     }
     
     enum CartError: Error {
@@ -37,6 +37,7 @@ final class Cart: ObservableObject {
         }
     }
     func add(product: Product) {
+        /*
         guard let url = networkService.makeRequest(to: Endpoint.stock(for: product.id), with: 1, method: .delete)  else {
             print("URL is malformed")
             return
@@ -44,6 +45,8 @@ final class Cart: ObservableObject {
         
         cancellable = networkService
             .publisher(for: url, responseType: ApiMessage.self, decoder: JSONDecoder())
+         */
+        cancellable = productService.reduceStock(for: product.id)
             .sink(receiveCompletion: { [weak self] completion in
                 switch completion {
                 case .failure(let error):
@@ -71,6 +74,7 @@ final class Cart: ObservableObject {
                 self.items.updateValue(updatedItem, forKey: product.id)
                 self.totalAmount = self.calculateTotalAmount()
             })
+            
     }
     
     // TODO: TEST
@@ -115,6 +119,13 @@ final class Cart: ObservableObject {
             return bundle
         }
         
-        return Order(userId: 1, addressId: 1, paymentMethodId: paymentMethod, purchasedItems: bundles)
+        return Order(userId: 1, addressId: addressId, paymentMethodId: paymentMethod, purchasedItems: bundles)
+    }
+}
+
+extension Cart {
+    // for testing
+    func setProductService(service: ProductServiceProtocol) {
+        self.productService = service
     }
 }

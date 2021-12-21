@@ -42,6 +42,13 @@ struct MyAddressesPage: View {
         }
         .background()
         .padding(.top)
+        .onAppear {
+            print("\(Self.self) appearing....")
+        }
+        .onDisappear {
+            //vm.invalidate()
+            print("\(Self.self) dissappering....")
+        }
     }
 }
 

@@ -14,9 +14,9 @@
             filePath = "bil403Tests/Cart_Tests.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "144"
-            endingLineNumber = "144"
-            landmarkName = "test_Cart_add_shouldReturnTotalAmountWhenAddedTwoDifferentOneSameItem()"
+            startingLineNumber = "193"
+            endingLineNumber = "193"
+            landmarkName = "test_Cart_add_shouldReturnTotalAmountWhenAddedTwoDifferentOneSameItem_whenAddingSucceded()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -30,9 +30,41 @@
             filePath = "bil403Tests/Cart_Tests.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "117"
-            endingLineNumber = "117"
-            landmarkName = "test_Cart_add_shouldBeStackedCorrectly()"
+            startingLineNumber = "167"
+            endingLineNumber = "167"
+            landmarkName = "test_Cart_add_shouldBeStackedCorrectly_whenAddingSucceded()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "317A377E-E4B5-4E68-82AC-B6312D2BC322"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "bil403/MyAddresses/ViewModel/MyAddressesViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "23"
+            endingLineNumber = "23"
+            landmarkName = "MyAddressesViewModel"
+            landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D3EEABB1-DC93-49E5-94E7-2C2DE21576C5"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "bil403Tests/Cart_Tests.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "467"
+            endingLineNumber = "467"
+            landmarkName = "test_should_True()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
