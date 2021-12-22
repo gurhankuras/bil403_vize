@@ -28,9 +28,17 @@ class FSAppDelegate: NSObject, UIApplicationDelegate {
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
   ) -> Bool {
-      Dependencies.initiliase(env: .prod)
-    // ...
+    setupDependencies()
+
     return true
   }
 }
 
+
+func setupDependencies() {
+    let session = URLSession.shared
+    let networkService = NetworkService(session: session)
+    let productService = LazyProductService(networkService: networkService)
+    
+    Dependencies.initiliase(networkService: networkService, productService: productService)
+}

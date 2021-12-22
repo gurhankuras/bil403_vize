@@ -67,7 +67,7 @@ extension ProductsViewModel_Tests {
     func test_Remote_loadProducts_shouldSetProductsOnInitiliazation_WhenLoadingSucceeded() throws {
         try XCTSkipIf(testOffline, "Just test with Mock")
         
-        let productService = ProductService(networkService: NetworkService())
+        let productService = ProductService(networkService: NetworkService(session: URLSession.shared))
         let viewModel = ProductsViewModel(category: .meyveSebze, productService: productService)
         
         var fetchedProducts: [Product]?
@@ -88,7 +88,7 @@ extension ProductsViewModel_Tests {
     func test_Remote_loading_shouldBeFalseWhenFetchingFinished() throws {
         try XCTSkipIf(testOffline, "Just test with Mock")
         
-        let productService = ProductService(networkService: NetworkService())
+        let productService = ProductService(networkService: NetworkService(session: URLSession.shared))
         let viewModel = ProductsViewModel(category: .meyveSebze, productService: productService)
         
         // test edip etmemekte kararsız kaldım true olmayabilir burada aslında

@@ -11,8 +11,10 @@ import Combine
 // https://www.swiftbysundell.com/articles/creating-generic-networking-apis-in-swift/
 
 final class NetworkService: NetworkServiceProtocol {
+    private let session: URLSession
     
-    init() {
+    init(session: URLSession) {
+        self.session = session
         print("NetworkService initiliazed!")
     }
 
@@ -21,7 +23,7 @@ final class NetworkService: NetworkServiceProtocol {
             responseType: T.Type = T.self,
             decoder: JSONDecoder = .init()
         ) -> AnyPublisher<T, Error> {
-            URLSession.shared.dataTaskPublisher(for: url)
+            session.dataTaskPublisher(for: url)
                 .receive(on: DispatchQueue.main)
                 .tryMap(handleOutput(output:))
                 .decode(type: T.self, decoder: decoder)
@@ -33,7 +35,7 @@ final class NetworkService: NetworkServiceProtocol {
             responseType: T.Type = T.self,
             decoder: JSONDecoder = .init()
         ) -> AnyPublisher<T, Error> {
-            URLSession.shared.dataTaskPublisher(for: url)
+            session.dataTaskPublisher(for: url)
                 .receive(on: DispatchQueue.main)
                 .tryMap(handleOutput(output:))
                 .decode(type: T.self, decoder: decoder)

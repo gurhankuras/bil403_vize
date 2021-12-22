@@ -21,7 +21,7 @@ class Cart_Tests: XCTestCase {
     }
 
     override func setUpWithError() throws {
-        networkService = NetworkService()
+        networkService = NetworkService(session: URLSession.shared)
         productService = ProductService(networkService: networkService!)
         cart = Cart(productService: productService!)
     }

@@ -7,30 +7,33 @@
 
 import Foundation
 
-// singleton lifetime olmasını istedigim dependency'leri inject etmenin daha iyi bir yolunu
-// bulana kadar bunu kullanacağım. Her ne kadar bu çözümü ya da service locater'ı kullanmak istemesem de
+// simdilik kullanıyorum stateless servisleri birden fazla class ile paylasmak istiyorum
+// yine de singleton kullanmak pek hosuma gitmiyor
 class Dependencies {
     static var instance: Dependencies!
     
-    var networkService: NetworkServiceProtocol!
-    lazy var productService: ProductServiceProtocol = {
-        if self.env == .prod {
-            return ProductService(networkService: networkService)
-        }
-        return ProductService(networkService: networkService)
-    }()
+    let networkService: NetworkServiceProtocol
+    let productService: ProductServiceProtocol
     
-    let env: Env
-    private init(env: Env) {
-        self.env = env
-        configureDependencies(env: env)
+    private init(
+        networkService: NetworkServiceProtocol,
+        productService: ProductServiceProtocol
+        
+    ) {
+        self.networkService = networkService
+        self.productService = productService
         print("DEPENDENCIES INITILIAZED")
     }
     
-    static func initiliase(env: Env) {
-        Self.instance = Dependencies(env: env)
+    static func initiliase(networkService: NetworkServiceProtocol,  productService: ProductServiceProtocol){
+        guard let _ = instance else {
+            Self.instance = Dependencies(networkService: networkService, productService: productService)
+            return
+        }
+        return
     }
     
+    /*
     private func configureDependencies(env: Env) {
         switch env {
         case .dev:
@@ -42,15 +45,14 @@ class Dependencies {
     }
     
     private func forProduction() {
-        networkService = NetworkService()
+        networkService = NetworkService(session: URLSession.shared)
     }
     
     private func forDevelopment() {
-        networkService = NetworkService()
+        networkService = NetworkService(session: URLSession.shared)
     }
+     */
 }
-
-
 
 
 enum Env {
