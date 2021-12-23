@@ -4,7 +4,7 @@ UI'in tasarımı direkt Getir'in mobil uygulamasını taklit edecek şekilde yap
 
 #### **TODOS**:
 
-- Unit Testing all the code  ❌
+- Unit Testing all the code  ❌ (while reading XUnit Test Patterns: Refactoring Test Code)
   
 &nbsp;
 
