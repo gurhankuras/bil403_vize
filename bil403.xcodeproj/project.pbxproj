@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		220E80492775EEA200E09DF7 /* DummyProductService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 220E80482775EEA200E09DF7 /* DummyProductService.swift */; };
+		220E804B2775EF6A00E09DF7 /* ProductServiceResponderStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 220E804A2775EF6A00E09DF7 /* ProductServiceResponderStub.swift */; };
+		220E804E2775F0B000E09DF7 /* ProductsViewModelTestHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 220E804D2775F0B000E09DF7 /* ProductsViewModelTestHelper.swift */; };
+		220E80502775F42000E09DF7 /* ProductServiceSabouterStub.swift in Sources */ = {isa = PBXBuildFile; fileRef = 220E804F2775F42000E09DF7 /* ProductServiceSabouterStub.swift */; };
 		226814942763558700D86311 /* ProductsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226814932763558700D86311 /* ProductsViewModel.swift */; };
 		2268149A2763576E00D86311 /* HTTPUrlResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 226814992763576E00D86311 /* HTTPUrlResponse.swift */; };
 		2268149D2763643C00D86311 /* ProductCategory2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2268149C2763643C00D86311 /* ProductCategory2.swift */; };
@@ -46,7 +50,6 @@
 		2279488327668192000FC651 /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2279488227668192000FC651 /* SearchViewModel.swift */; };
 		2279488527668EDB000FC651 /* MyPaymentMethodsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2279488427668EDB000FC651 /* MyPaymentMethodsViewModel.swift */; };
 		227948882766942B000FC651 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227948872766942B000FC651 /* ProfileViewModel.swift */; };
-		2281C448277257C60004187C /* MockProductService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2281C447277257C60004187C /* MockProductService.swift */; };
 		2281C44B277266BB0004187C /* product1.json in Sources */ = {isa = PBXBuildFile; fileRef = 2281C44A277266BB0004187C /* product1.json */; };
 		2281C44E277266F90004187C /* product3.json in Sources */ = {isa = PBXBuildFile; fileRef = 2281C44D277266F90004187C /* product3.json */; };
 		2281C4502772670C0004187C /* order.json in Sources */ = {isa = PBXBuildFile; fileRef = 2281C44F2772670C0004187C /* order.json */; };
@@ -102,6 +105,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		220E80482775EEA200E09DF7 /* DummyProductService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DummyProductService.swift; sourceTree = "<group>"; };
+		220E804A2775EF6A00E09DF7 /* ProductServiceResponderStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductServiceResponderStub.swift; sourceTree = "<group>"; };
+		220E804D2775F0B000E09DF7 /* ProductsViewModelTestHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductsViewModelTestHelper.swift; sourceTree = "<group>"; };
+		220E804F2775F42000E09DF7 /* ProductServiceSabouterStub.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductServiceSabouterStub.swift; sourceTree = "<group>"; };
 		226814932763558700D86311 /* ProductsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductsViewModel.swift; sourceTree = "<group>"; };
 		226814992763576E00D86311 /* HTTPUrlResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPUrlResponse.swift; sourceTree = "<group>"; };
 		2268149C2763643C00D86311 /* ProductCategory2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductCategory2.swift; sourceTree = "<group>"; };
@@ -144,7 +151,6 @@
 		2279488227668192000FC651 /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
 		2279488427668EDB000FC651 /* MyPaymentMethodsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPaymentMethodsViewModel.swift; sourceTree = "<group>"; };
 		227948872766942B000FC651 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
-		2281C447277257C60004187C /* MockProductService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockProductService.swift; sourceTree = "<group>"; };
 		2281C44A277266BB0004187C /* product1.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = product1.json; sourceTree = "<group>"; };
 		2281C44C277266E00004187C /* product2.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = product2.json; sourceTree = "<group>"; };
 		2281C44D277266F90004187C /* product3.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = product3.json; sourceTree = "<group>"; };
@@ -208,6 +214,32 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		220E80462775EE8000E09DF7 /* TestDoubles */ = {
+			isa = PBXGroup;
+			children = (
+				220E80472775EE8900E09DF7 /* ProductService */,
+			);
+			path = TestDoubles;
+			sourceTree = "<group>";
+		};
+		220E80472775EE8900E09DF7 /* ProductService */ = {
+			isa = PBXGroup;
+			children = (
+				220E80482775EEA200E09DF7 /* DummyProductService.swift */,
+				220E804A2775EF6A00E09DF7 /* ProductServiceResponderStub.swift */,
+				220E804F2775F42000E09DF7 /* ProductServiceSabouterStub.swift */,
+			);
+			path = ProductService;
+			sourceTree = "<group>";
+		};
+		220E804C2775F08900E09DF7 /* TestHelper */ = {
+			isa = PBXGroup;
+			children = (
+				220E804D2775F0B000E09DF7 /* ProductsViewModelTestHelper.swift */,
+			);
+			path = TestHelper;
+			sourceTree = "<group>";
+		};
 		226814922763556100D86311 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
@@ -307,6 +339,7 @@
 		22767067275F78AD00EA95DA /* bil403Tests */ = {
 			isa = PBXGroup;
 			children = (
+				220E80462775EE8000E09DF7 /* TestDoubles */,
 				2281C454277271160004187C /* ProductsViewModel */,
 				2281C453277270DE0004187C /* Cart */,
 				2281C44A277266BB0004187C /* product1.json */,
@@ -527,6 +560,7 @@
 		2281C454277271160004187C /* ProductsViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				220E804C2775F08900E09DF7 /* TestHelper */,
 				2281C455277271350004187C /* ProductsViewModel_Tests.swift */,
 			);
 			path = ProductsViewModel;
@@ -654,7 +688,6 @@
 			children = (
 				22C86C3E276E423000039523 /* NetworkService.swift */,
 				22F12A122770954E009F50DB /* ProductService.swift */,
-				2281C447277257C60004187C /* MockProductService.swift */,
 				2291A1A52773475300289D48 /* LazyProductService.swift */,
 			);
 			path = Implementations;
@@ -838,7 +871,6 @@
 				228C6AEB2760D5D000482362 /* SearchProductPage.swift in Sources */,
 				2276705A275F78AC00EA95DA /* ContentView.swift in Sources */,
 				2279487D276670C5000FC651 /* MyOrdersPage.swift in Sources */,
-				2281C448277257C60004187C /* MockProductService.swift in Sources */,
 				2268149D2763643C00D86311 /* ProductCategory2.swift in Sources */,
 				22F12A112770950D009F50DB /* ProductServiceProtocol.swift in Sources */,
 				2279487227666F6A000FC651 /* MyAddressesPage.swift in Sources */,
@@ -874,13 +906,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				2281C456277271350004187C /* ProductsViewModel_Tests.swift in Sources */,
+				220E804E2775F0B000E09DF7 /* ProductsViewModelTestHelper.swift in Sources */,
 				226814A62763A2F800D86311 /* Cart_Tests.swift in Sources */,
 				22767069275F78AD00EA95DA /* bil403Tests.swift in Sources */,
 				2281C4502772670C0004187C /* order.json in Sources */,
 				2281C45227726B6B0004187C /* readStub.swift in Sources */,
+				220E80502775F42000E09DF7 /* ProductServiceSabouterStub.swift in Sources */,
+				220E80492775EEA200E09DF7 /* DummyProductService.swift in Sources */,
 				2281C44B277266BB0004187C /* product1.json in Sources */,
 				22C86C3C276E1CF400039523 /* Stubbable.swift in Sources */,
 				2268149F276371D800D86311 /* ProductService_Tests.swift in Sources */,
+				220E804B2775EF6A00E09DF7 /* ProductServiceResponderStub.swift in Sources */,
 				2281C44E277266F90004187C /* product3.json in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

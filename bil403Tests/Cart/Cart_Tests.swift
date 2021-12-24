@@ -10,6 +10,10 @@ import XCTest
 
 
 
+class CartTestsHelper {
+    
+}
+
 class Cart_Tests: XCTestCase {
     
     var cart: Cart?
@@ -17,13 +21,15 @@ class Cart_Tests: XCTestCase {
     var productService: ProductServiceProtocol?
     
     func makeFailingCart() -> Cart {
-        return Cart(productService: MockProductService.failingService())
+        return Cart(productService: ProductServiceSaboteurStub(error: MockError()) )
     }
 
     override func setUpWithError() throws {
+        /*
         networkService = NetworkService(session: URLSession.shared)
         productService = ProductService(networkService: networkService!)
         cart = Cart(productService: productService!)
+         */
     }
 
     override func tearDownWithError() throws {
@@ -33,13 +39,13 @@ class Cart_Tests: XCTestCase {
     
     // MARK: isEmpty()
     func test_Cart_isEmpty_shouldReturnTrueIfCartHasNoItem() {
-        let cart = Cart(productService: productService!, data: [:])
+        let cart = Cart(productService: DummyProductService(), data: [:])
         
         XCTAssertTrue(cart.isEmpty)
     }
     
     func test_Cart_isEmpty_shouldHasNoItemWhenDefaultInitiliazed() {
-        let cart = Cart(productService: productService!)
+        let cart = Cart(productService: DummyProductService())
         
         XCTAssertTrue(cart.isEmpty)
     }
@@ -48,7 +54,7 @@ class Cart_Tests: XCTestCase {
         let product = Product.stub(withID: 1)
         let cartItem = CartItem(product: product, count: 1)
         
-        let cart = Cart(productService: productService!, data: [product.id: cartItem])
+        let cart = Cart(productService: DummyProductService(), data: [product.id: cartItem])
         
         XCTAssertTrue(!cart.isEmpty)
     }
@@ -56,10 +62,9 @@ class Cart_Tests: XCTestCase {
     
     // MARK: add()
     func test_Cart_add_shouldAddItemIfNotExists_whenAddingSucceeded() {
-        let mockProductService = MockProductService.succedingService(products: nil, message: .init(message: "mock"))
-        
-        let cart = Cart(productService: mockProductService)
-        
+        // Setup fixture
+        let responderProductService = ProductServiceResponserStub(message: .init(message: "mock"))
+        let cart = Cart(productService: responderProductService)
         let product = Product.stub(withID: 1)
         
         // Act
@@ -81,9 +86,9 @@ class Cart_Tests: XCTestCase {
     }
     
     func test_Cart_add_totalAmountShouldBeChangedWhenAddedNonFreeItem_whenAddingSucceeded() {
-        let mockProductService = MockProductService.succedingService(products: nil, message: .init(message: "mock"))
+        let responderProductService = ProductServiceResponserStub(message: .init(message: "mock"))
         
-        let cart = Cart(productService: mockProductService)
+        let cart = Cart(productService: responderProductService)
             
         let expectedTotalAmount = Double.random(in: 1..<10)
         let product = Product.stub(withID: 2)
@@ -113,9 +118,9 @@ class Cart_Tests: XCTestCase {
     }
     
     func test_Cart_add_shouldBeStackedWhenSameItemAdded_whenAddingSucceeded() {
-        let mockProductService = MockProductService.succedingService(products: nil, message: .init(message: "mock"))
+        let responderProductService = ProductServiceResponserStub(message: .init(message: "mock"))
         
-        let cart = Cart(productService: mockProductService)
+        let cart = Cart(productService: responderProductService)
             
         let product1 = Product.stub(withID: 1)
         let product2 = Product.stub(withID: 1)
@@ -129,16 +134,15 @@ class Cart_Tests: XCTestCase {
     }
     
     func test_Cart_add_shouldNotBeStackedWhenSameItemAdded_whenAddingFailed() {
-        let succeedsMockService = MockProductService.succedingService(products: nil, message: .init(message: "mock"))
-        
-        let cart = Cart(productService: succeedsMockService)
+        let responderProductService = ProductServiceResponserStub(message: .init(message: "mock"))
+        let cart = Cart(productService: responderProductService)
             
         let product1 = Product.stub(withID: 1)
         let product2 = Product.stub(withID: 1)
 
         // Act
         cart.add(product: product1)
-        cart.setProductService(service: MockProductService.failingService())
+        cart.setProductService(service: ProductServiceSaboteurStub(error: MockError()))
         cart.add(product: product2)
         
         print(cart.items)
@@ -146,9 +150,9 @@ class Cart_Tests: XCTestCase {
     }
     
     func test_Cart_add_shouldReturnTotalAmountWhenAddedTwoDifferentItem_whenAddingSucceded() {
-        let mockProductService = MockProductService.succedingService(products: nil, message: .init(message: "mock"))
+        let responderProductService = ProductServiceResponserStub(message: .init(message: "mock"))
         
-        let cart = Cart(productService: mockProductService)
+        let cart = Cart(productService: responderProductService)
             
         let firstProductPrice = 2.5
         let secondPricePrice = 5.5
@@ -164,6 +168,7 @@ class Cart_Tests: XCTestCase {
         let expectedTotalAmount = cart.calculateTotalAmount()
         XCTAssertEqual(expectedTotalAmount, firstProductPrice + secondPricePrice)
     }
+    /*
     func test_Cart_add_shouldBeStackedCorrectly_whenAddingSucceded() {
         
         // Prepare
@@ -466,4 +471,6 @@ func readStub<T: Decodable>(forName: String, returnType: T.Type) throws -> T {
 extension Cart_Tests {
    
     
+}
+*/
 }

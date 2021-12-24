@@ -12,20 +12,29 @@ class ProductsViewModel_Tests: XCTestCase {
     let testOffline = true
 }
 
-// MOCKED
+// TODO: REFACTOR TESTS
+
+// STUBBED
 extension ProductsViewModel_Tests {
-    func test_Mocked_loadProducts_shouldSetProductsOnInitiliazation_WhenLoadingSucceeded() throws {
-        let preparedProducts = [
-            Product.stub(withID: 1),
-            Product.stub(withID: 2),
-        ]
-        
-        let mockViewModel = MockProductService.succedingService(products: preparedProducts)
-        let viewModel = ProductsViewModel(category: .meyveSebze, productService: mockViewModel)
+    
+    /*
+    func createOfflineSuccessfulProductsViewModel(products: [Products]) {
+        let responderStubProductService = ProductServiceResponserStub(products: preparedProducts, message: nil)
+        let viewModel = ProductsViewModel(category: .meyveSebze, productService: responderStubProductService)
+    }
+     */
+    
+    
+    func test_Stubbed_loadProducts_shouldSetProductsOnInitiliazation_WhenLoadingSucceeded() throws {
+        // Setup
+        let preparedProducts = createAnonymousProducts(count: 2)
+        let responderStubProductService = ProductServiceResponserStub(products: preparedProducts, message: nil)
+        let viewModel = ProductsViewModel(category: .meyveSebze, productService: responderStubProductService)
         
         var fetchedProducts: [Product]?
-        
         let expectation = self.expectation(description: "should fetch products")
+        
+        // Act
         let cancellable = viewModel.$products
             .sink { products in
                 fetchedProducts = products
@@ -34,18 +43,19 @@ extension ProductsViewModel_Tests {
         
         waitForExpectations(timeout: 5, handler: nil)
         cancellable.cancel()
-        XCTAssertEqual(fetchedProducts?.isEmpty, false)
-        XCTAssertEqual(fetchedProducts?.count, preparedProducts.count)
-        XCTAssertEqual(fetchedProducts, preparedProducts)
+        
+        // Assert
+        assertProductsFetched(expectedProducts: preparedProducts, fetchedProducts: fetchedProducts)
     }
     
-    func test_Mock_loadProducts_productsShouldBeEmptyArrayOnInitiliazation_WhenLoadingFailed() throws {
-        let mockViewModel = MockProductService.failingService()
-        let viewModel = ProductsViewModel(category: .meyveSebze, productService: mockViewModel)
-        
+    func test_Stubbed_loadProducts_productsShouldBeEmptyArrayOnInitiliazation_WhenLoadingFailed() throws {
+        // Setup
+        let saboteurProductService = ProductServiceSaboteurStub(error: MockError())
+        let viewModel = ProductsViewModel(category: .meyveSebze, productService: saboteurProductService)
         let expectation = self.expectation(description: "should not fulfilled and fetchedProducts must be stay as before")
         expectation.isInverted = true
         
+        // Act
         var fetchedProducts: [Product]?
         let cancellable = viewModel.$products
             .dropFirst()
@@ -56,6 +66,8 @@ extension ProductsViewModel_Tests {
         
         waitForExpectations(timeout: 3, handler: nil)
         cancellable.cancel()
+        
+        // Assert
         XCTAssertEqual(fetchedProducts, nil)
         XCTAssertEqual(viewModel.products.isEmpty, true)
     }
@@ -87,13 +99,14 @@ extension ProductsViewModel_Tests {
     
     func test_Remote_loading_shouldBeFalseWhenFetchingFinished() throws {
         try XCTSkipIf(testOffline, "Just test with Mock")
-        
+        // Setup
         let productService = ProductService(networkService: NetworkService(session: URLSession.shared))
         let viewModel = ProductsViewModel(category: .meyveSebze, productService: productService)
         
         // test edip etmemekte kararsız kaldım true olmayabilir burada aslında
         XCTAssertEqual(viewModel.loading, true)
         
+        // Act
         let expectation = self.expectation(description: "")
         let cancellable = viewModel.$products
             .dropFirst()
@@ -103,6 +116,8 @@ extension ProductsViewModel_Tests {
         
         waitForExpectations(timeout: 5, handler: nil)
         cancellable.cancel()
+        
+        // Assert
         XCTAssertEqual(viewModel.loading, false)
     }
 }
